@@ -16,8 +16,12 @@ const app = express();
 // Middleware para analisar JSON
 app.use(express.json());
 
-// Definir rotas (aqui você vai incluir seus arquivos de rotas)
-// Exemplo: app.use('/api/surveys', require('./routes/surveyRoutes'));
+// Importar rotas
+const surveyRoutes = require('./routes/surveyRoutes');
+
+// Usar rotas
+app.use('/api/surveys', surveyRoutes);
+
 
 // Iniciar o servidor
 const PORT = process.env.PORT || 5000;
