@@ -30,8 +30,13 @@ const userSchema = new mongoose.Schema({
   image: {
     type: String,
     required: false // Se você decidir armazenar a imagem de perfil do Google
+  },
+  role: {
+    type: String,
+    enum: ['SurveyCoordinator', 'SurveyRespondent'],
+    required: true,
+    default: 'SurveyRespondent' // O padrão pode ser definido com base na lógica do seu aplicativo
   }
-  // Aqui você pode adicionar mais campos conforme necessário
 });
 
 module.exports = mongoose.model('User', userSchema);
