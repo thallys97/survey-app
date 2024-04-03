@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const cors = require('cors');
 
 // Carregar variáveis de ambiente
 dotenv.config();
@@ -10,8 +11,22 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
 .then(() => console.log('MongoDB connected...'))
 .catch(err => console.log(err));
 
+
+// Configuração do CORS
+const corsOptions = {
+  origin: process.env.CLIENT_URL, // ou o URL do seu front-end em produção
+  credentials: true, // permite enviar e receber cookies
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  preflightContinue: false,
+  optionsSuccessStatus: 204
+};
+
+
+
 // Inicializar o aplicativo Express
 const app = express();
+
+app.use(cors(corsOptions)); // Use CORS antes das suas rotas
 
 // Middleware para analisar JSON
 app.use(express.json());
@@ -29,8 +44,16 @@ const session = require('express-session');
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
+  cookie: {
+    httpOnly: true
+  }
 }));
+
+if (process.env.NODE_ENV === "production") {
+  app.set('trust proxy', 1); // Trust first proxy
+  sess.cookie.secure = true; // Serve secure cookies
+}
 
 // Importar rotas
 const surveyRoutes = require('./routes/surveyRoutes');
