@@ -2,6 +2,10 @@ const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
+const session = require('express-session');
+const passport = require('passport');
+const authRoutes = require('./routes/authRoutes');
+const surveyRoutes = require('./routes/surveyRoutes');
 
 // Carregar variáveis de ambiente
 dotenv.config();
@@ -11,6 +15,8 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
 .then(() => console.log('MongoDB connected...'))
 .catch(err => console.log(err));
 
+// Inicializar o aplicativo Express
+const app = express();
 
 // Configuração do CORS
 const corsOptions = {
@@ -21,44 +27,36 @@ const corsOptions = {
   optionsSuccessStatus: 204
 };
 
-
-
-// Inicializar o aplicativo Express
-const app = express();
-
 app.use(cors(corsOptions)); // Use CORS antes das suas rotas
 
 // Middleware para analisar JSON
 app.use(express.json());
 
-const passport = require('passport');
-require('./config/passport')(passport); // Config do Passport
-
-app.use(passport.initialize());
-app.use(passport.session()); // Se você está usando sessões
-
-const authRoutes = require('./routes/authRoutes');
-app.use('/auth', authRoutes);
-
-const session = require('express-session');
+// Configuração do express-session
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
   cookie: {
-    httpOnly: true
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production', // Assegura-se de que o cookie só será enviado com requisições HTTPS
   }
 }));
 
-if (process.env.NODE_ENV === "production") {
-  app.set('trust proxy', 1); // Trust first proxy
-  sess.cookie.secure = true; // Serve secure cookies
-}
+
+// Configuração do Passport
+require('./config/passport')(passport); // Config do Passport
+
+app.use(passport.initialize());
+app.use(passport.session()); // Se você está usando sessões
+
+
 
 // Importar rotas
-const surveyRoutes = require('./routes/surveyRoutes');
+
 
 // Usar rotas
+app.use('/auth', authRoutes);
 app.use('/api/surveys', surveyRoutes);
 
 
