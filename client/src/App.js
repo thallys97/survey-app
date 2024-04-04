@@ -1,8 +1,10 @@
 //import logo from './logo.svg';
 import './App.css';
 import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import authService from './services/authService';
 import Login from './components/Login';
+import Dashboard from './components/Dashboard';
 // Importe outros componentes e serviços conforme necessário
 
 const App = () => {
@@ -19,10 +21,13 @@ const App = () => {
   }, []);
 
   return (
-    <div>
-      <Login />
-      {/* Outros componentes do seu aplicativo */}
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        {/* Outras rotas... */}
+      </Routes>
+    </Router>
   );
 };
 
