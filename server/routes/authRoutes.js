@@ -26,9 +26,15 @@ router.get('/current_user', (req, res) => {
 });
 
 router.get('/logout', (req, res) => {
-  req.logout();  // Passport expõe este método para terminar uma sessão de login
-  req.session.destroy();  // Destrói a sessão no servidor
-  res.redirect('/');
+  req.logout((error) => {
+    if (error) { 
+      return next(error);
+    }
+    req.session.destroy(() => {
+      res.clearCookie('connect.sid'); // The name of the cookie may be different based on your configuration
+      res.redirect(process.env.CLIENT_URL + '/login');
+    });
+  });
 });
 
 // Exportar as rotas
