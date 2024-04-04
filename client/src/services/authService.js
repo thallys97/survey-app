@@ -21,7 +21,6 @@ const authService = {
     // Encerra a sessão do usuário
     try {
       await axios.get('/auth/logout');
-      window.location.href = '/';
     } catch (error) {
       console.error('Erro ao encerrar sessão', error);
     }
