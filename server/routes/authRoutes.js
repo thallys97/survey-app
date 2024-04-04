@@ -32,7 +32,7 @@ router.get('/logout', (req, res) => {
     }
     req.session.destroy(() => {
       res.clearCookie('connect.sid'); // The name of the cookie may be different based on your configuration
-      res.redirect(process.env.CLIENT_URL + '/login');
+      res.redirect(process.env.CLIENT_URL);
     });
   });
 });
