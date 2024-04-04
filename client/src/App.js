@@ -3,7 +3,7 @@ import './App.css';
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import authService from './services/authService';
-import Login from './components/Login';
+import Home from './components/Home';
 import Dashboard from './components/Dashboard';
 // Importe outros componentes e serviços conforme necessário
 
@@ -23,7 +23,7 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Home />} />
         <Route path="/dashboard" element={<Dashboard />} />
         {/* Outras rotas... */}
       </Routes>
