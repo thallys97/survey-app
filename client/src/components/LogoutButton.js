@@ -8,6 +8,7 @@ const LogoutButton = () => {
   const handleLogout = async () => {
     await authService.logout();
     navigate('/');
+    window.location.reload();
   };
 
   return (
