@@ -1,14 +1,17 @@
-import React from 'react';
-import authService from '../services/authService';
+import React, { useContext } from 'react';
+import { AuthContext } from '../contexts/AuthContext';
 
 const Home = () => {
-  const handleLogin = () => {
-    authService.login();
-  };
+  const { user, login } = useContext(AuthContext);
 
   return (
     <div>
-      <button onClick={handleLogin}>Login com Google</button>
+      {user ? (
+        <p>Bem-vindo, {user.displayName}!</p>
+      ) : (
+    
+        <button onClick={login}>Login com Google</button>
+      )}
     </div>
   );
 };
