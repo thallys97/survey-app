@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { AuthContext } from '../contexts/AuthContext';
 import LogoutButton from './LogoutButton';
 
 const Dashboard = () => {
+  const { user } = useContext(AuthContext);
+
   return (
     <div>
       <h1>Dashboard</h1>
-      <LogoutButton /> {/* Inclua o botão de logout */}
-      {/* Restante do seu componente */}
+      {user && <p>Welcome, {user.displayName}!</p>}
+      <LogoutButton />
     </div>
   );
 };
