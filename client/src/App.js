@@ -6,6 +6,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import Home from './components/Home';
 import Dashboard from './components/Dashboard';
 import PrivateRoute from './components/PrivateRoute';
+import SurveyCreator from './components/SurveyCreator';
 
 const App = () => {
   return (
@@ -18,6 +19,14 @@ const App = () => {
             element={
               <PrivateRoute>
                 <Dashboard />
+              </PrivateRoute>
+            } 
+          />
+          <Route 
+            path="/create-survey" 
+            element={
+              <PrivateRoute>
+                <SurveyCreator />
               </PrivateRoute>
             } 
           />
