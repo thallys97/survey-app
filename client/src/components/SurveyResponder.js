@@ -47,6 +47,24 @@ const isSurveyComplete = () => {
     fetchSurveys();
   }, []);
 
+  const handleSubmit = async () => {
+    if (!isSurveyComplete()) {
+      alert('Por favor, responda a todas as perguntas antes de submeter.');
+      return;
+    }
+  
+    try {
+      const response = await axiosInstance.post('/api/surveys/response', {
+        surveyId: selectedSurvey._id,
+        responses: answers
+      });
+      console.log(response.data);
+      // Aqui você pode redirecionar para uma página de agradecimento ou exibir uma mensagem de sucesso.
+    } catch (error) {
+      console.error('Erro ao submeter respostas', error);
+    }
+  };
+
   if (loading) {
     return <div>Carregando...</div>;
   }
