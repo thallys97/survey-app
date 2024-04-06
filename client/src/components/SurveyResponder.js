@@ -65,6 +65,12 @@ const isSurveyComplete = () => {
     }
   };
 
+  const handleCancel = () => {
+    setSelectedSurvey(null);
+    setAnswers({});
+    navigate('/dashboard'); // Use o useNavigate para redirecionar
+  };
+
   if (loading) {
     return <div>Carregando...</div>;
   }
