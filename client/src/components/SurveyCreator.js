@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import axiosInstance from '../api/axiosInstance';
+import { useNavigate } from 'react-router-dom';
 
 const SurveyCreator = () => {
+  const navigate = useNavigate(); // Inicializar useNavigate
   const [survey, setSurvey] = useState({
     title: '',
     questions: [{ text: '', choices: [''] }]
@@ -91,7 +93,11 @@ const SurveyCreator = () => {
   };
 
   const handleCancel = () => {
-    // Reset the state or redirect the user
+    setSurvey({
+      title: '',
+      questions: [{ text: '', choices: [''] }]
+    }); // Limpar o estado do formulário
+    navigate('/dashboard'); // Redirecionar para o dashboard
   };
 
   return (
