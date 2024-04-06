@@ -12,13 +12,26 @@ exports.createSurvey = async (req, res) => {
   }
 };
 
-// Lista todas as surveys
+// Lista apenas as surveys que estão abertas
 exports.getAllSurveys = async (req, res) => {
   try {
-    const surveys = await Survey.find();
+    const surveys = await Survey.find({ open: true });
     res.status(200).json(surveys);
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching surveys', error: error.message });
+    res.status(500).json({ message: 'Error fetching open surveys', error: error.message });
+  }
+};
+
+// Obter uma survey específica pelo ID
+exports.getSurveyById = async (req, res) => {
+  try {
+    const survey = await Survey.findById(req.params.id);
+    if (!survey) {
+      return res.status(404).json({ message: 'Survey not found' });
+    }
+    res.status(200).json(survey);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching survey', error: error.message });
   }
 };
 
