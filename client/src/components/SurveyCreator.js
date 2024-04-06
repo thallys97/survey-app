@@ -101,45 +101,55 @@ const SurveyCreator = () => {
   };
 
   return (
-    <div>
-      <h2>Criar Survey</h2>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="title">Título da Survey:</label>
-        <input
-          type="text"
-          id="title"
-          value={survey.title}
-          onChange={handleTitleChange}
-        />
+    <div className="max-w-2xl mx-auto p-6 bg-white shadow-md rounded-md">
+      <h2 className="text-2xl font-bold mb-4 text-gray-700">Criar Survey</h2>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label htmlFor="title" className="block text-sm font-medium text-gray-700">Título da Survey:</label>
+          <input
+            type="text"
+            id="title"
+            value={survey.title}
+            onChange={handleTitleChange}
+            className="mt-1 block w-full border-gray-300 shadow-sm rounded-md"
+          />
+        </div>
 
         {survey.questions.map((question, qIndex) => (
-          <div key={`question-${qIndex}`}>
-            <label htmlFor={`question-${qIndex}`}>Pergunta {qIndex + 1}:</label>
+          <div key={`question-${qIndex}`} className="space-y-3">
+            <div className="flex items-center justify-between">
+              <label htmlFor={`question-${qIndex}`} className="text-sm font-medium text-gray-700">Pergunta {qIndex + 1}:</label>
+              <button type="button" onClick={() => removeQuestion(qIndex)} className="text-xs text-red-600 hover:text-red-700">Remover Pergunta</button>
+            </div>
             <input
               type="text"
               id={`question-${qIndex}`}
               value={question.text}
               onChange={(e) => handleQuestionChange(qIndex, e)}
+              className="block w-full border-gray-300 shadow-sm rounded-md"
             />
-            <button type="button" onClick={() => removeQuestion(qIndex)}>Remover Pergunta</button>
             {question.choices.map((choice, cIndex) => (
-              <div key={`choice-${qIndex}-${cIndex}`}>
-                <label htmlFor={`choice-${qIndex}-${cIndex}`}>Opção {cIndex + 1}:</label>
+              <div key={`choice-${qIndex}-${cIndex}`} className="flex items-center space-x-2">
                 <input
                   type="text"
                   id={`choice-${qIndex}-${cIndex}`}
                   value={choice}
                   onChange={(e) => handleChoiceChange(qIndex, cIndex, e)}
+                  className="block w-full border-gray-300 shadow-sm rounded-md"
                 />
-                <button type="button" onClick={() => removeChoice(qIndex, cIndex)}>Remover Opção</button>
+                <button type="button" onClick={() => removeChoice(qIndex, cIndex)} className="text-xs text-red-600 hover:text-red-700">Remover Opção</button>
               </div>
             ))}
-            <button type="button" onClick={() => addChoice(qIndex)}>Adicionar Opção</button>
+            <button type="button" onClick={() => addChoice(qIndex)} className="text-sm text-blue-600 hover:text-blue-700">Adicionar Opção</button>
           </div>
         ))}
-        <button type="button" onClick={addQuestion}>Adicionar Pergunta</button>
-        <button type="submit">Salvar Survey</button>
-        <button type="button" onClick={handleCancel}>Cancelar</button>
+        <div className="flex justify-between items-center">
+          <button type="button" onClick={addQuestion} className="text-sm text-blue-600 hover:text-blue-700">Adicionar Pergunta</button>
+          <div>
+            <button type="submit" className="text-white bg-blue-600 hover:bg-blue-700 rounded-md px-4 py-2 mr-2">Salvar Survey</button>
+            <button type="button" onClick={handleCancel} className="text-gray-600 bg-white border border-gray-300 hover:bg-gray-50 rounded-md px-4 py-2">Cancelar</button>
+          </div>
+        </div>
       </form>
     </div>
   );
