@@ -10,6 +10,9 @@ router.post('/', ensureAuth, ensureCoordinatorOrAdmin, surveyController.createSu
 // GET para listar todas as surveys
 router.get('/', surveyController.getAllSurveys);
 
+// GET para obter todas as surveys abertas
+router.get('/open', surveyController.getOpenSurveys);
+
 // GET para obter uma survey específica pelo ID
 router.get('/:id', ensureAuth, surveyController.getSurveyById);
 
