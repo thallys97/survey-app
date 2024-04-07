@@ -6,6 +6,7 @@ const session = require('express-session');
 const passport = require('passport');
 const authRoutes = require('./routes/authRoutes');
 const surveyRoutes = require('./routes/surveyRoutes');
+const userRoutes = require('./routes/userRoutes');
 
 // Carregar variáveis de ambiente
 dotenv.config();
@@ -58,6 +59,7 @@ app.use(passport.session()); // Se você está usando sessões
 // Usar rotas
 app.use('/auth', authRoutes);
 app.use('/api/surveys', surveyRoutes);
+app.use('/api/users', userRoutes);
 
 
 // Iniciar o servidor
