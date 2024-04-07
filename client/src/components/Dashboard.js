@@ -22,6 +22,11 @@ const Dashboard = () => {
       {user && <p>Welcome, {user.displayName}!</p>}
       <button onClick={handleCreateSurvey}>Criar survey</button>
       <button onClick={handleRespondToSurvey}>Checar surveys abertas</button>
+      {user.role === 'SurveyAdmin' && (
+        <button onClick={() => navigate('/user-management')} className="p-2 bg-blue-500 text-white rounded mt-4">
+          Gerenciar Usuários
+        </button>
+      )}
       <LogoutButton />
     </div>
   );
