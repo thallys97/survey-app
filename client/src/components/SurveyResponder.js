@@ -40,7 +40,7 @@ const SurveyResponder = () => {
     const fetchSurveys = async () => {
       setLoading(true);
       try {
-        const response = await axiosInstance.get('/api/surveys');
+        const response = await axiosInstance.get('/api/surveys/open');
         setSurveysList(response.data); // Assumindo que o backend envia as surveys abertas na resposta
       } catch (error) {
         console.error('Erro ao buscar surveys', error);
