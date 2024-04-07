@@ -44,14 +44,18 @@ const SurveyCreator = () => {
 
   const addChoice = (questionIndex) => {
     const newQuestions = [...survey.questions];
-    newQuestions[questionIndex].choices.push('');
-    setSurvey({ ...survey, questions: newQuestions });
+    if (newQuestions[questionIndex].choices.length < 5) {
+      newQuestions[questionIndex].choices.push('');
+      setSurvey({ ...survey, questions: newQuestions });
+    }
   };
 
   const removeChoice = (questionIndex, choiceIndex) => {
     const newQuestions = [...survey.questions];
-    newQuestions[questionIndex].choices.splice(choiceIndex, 1);
-    setSurvey({ ...survey, questions: newQuestions });
+    if (newQuestions[questionIndex].choices.length > 1) {
+      newQuestions[questionIndex].choices.splice(choiceIndex, 1);
+      setSurvey({ ...survey, questions: newQuestions });
+    }
   };
 
   
@@ -138,6 +142,8 @@ const SurveyCreator = () => {
             />
             {question.choices.map((choice, cIndex) => (
               <div key={`choice-${qIndex}-${cIndex}`} className="flex items-center space-x-2">
+              <label htmlFor={`choice-${qIndex}-${cIndex}`} className="block text-sm font-medium text-gray-700">Opção {cIndex + 1}:</label>
+              <div key={`choice-${qIndex}-${cIndex}`} className="flex items-center space-x-2">
                 <input
                   type="text"
                   id={`choice-${qIndex}-${cIndex}`}
@@ -145,10 +151,19 @@ const SurveyCreator = () => {
                   onChange={(e) => handleChoiceChange(qIndex, cIndex, e)}
                   className="block w-full border-gray-300 shadow-sm rounded-md"
                 />
-                <button type="button" onClick={() => removeChoice(qIndex, cIndex)} className="text-xs text-red-600 hover:text-red-700">Remover Opção</button>
+                {question.choices.length > 1 && (
+                  <button type="button" onClick={() => removeChoice(qIndex, cIndex)} className="text-xs text-red-600 hover:text-red-700">
+                    Remover Opção
+                  </button>
+                )}
               </div>
+            </div>
             ))}
-            <button type="button" onClick={() => addChoice(qIndex)} className="text-sm text-blue-600 hover:text-blue-700">Adicionar Opção</button>
+            {question.choices.length < 5 && (
+              <button type="button" onClick={() => addChoice(qIndex)} className="text-sm text-blue-600 hover:text-blue-700">
+                Adicionar Opção
+              </button>
+            )}
           </div>
         ))}
         <div className="flex justify-between items-center">
