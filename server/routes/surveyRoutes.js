@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const surveyController = require('../controllers/surveyController');
-const { ensureAuth, ensureCoordinator } = require('../middlewares/authMiddleware');
+const { ensureAuth, ensureCoordinatorOrAdmin } = require('../middlewares/authMiddleware');
 
 
 // POST para criar uma nova survey - apenas usuários autenticados
-router.post('/', ensureAuth, ensureCoordinator, surveyController.createSurvey);
+router.post('/', ensureAuth, ensureCoordinatorOrAdmin, surveyController.createSurvey);
 
 // GET para listar todas as surveys
 router.get('/', surveyController.getAllSurveys);
@@ -14,10 +14,10 @@ router.get('/', surveyController.getAllSurveys);
 router.get('/:id', ensureAuth, surveyController.getSurveyById);
 
 // Endpoint para abrir uma survey
-router.put('/open/:id', ensureAuth, ensureCoordinator, surveyController.openSurvey);
+router.put('/open/:id', ensureAuth, ensureCoordinatorOrAdmin, surveyController.openSurvey);
 
 // Endpoint para fechar uma survey
-router.put('/close/:id', ensureAuth, ensureCoordinator, surveyController.closeSurvey);
+router.put('/close/:id', ensureAuth, ensureCoordinatorOrAdmin, surveyController.closeSurvey);
 
 // Endpoint para submeter resposta para uma survey
 router.post('/response', ensureAuth, surveyController.submitResponse);
