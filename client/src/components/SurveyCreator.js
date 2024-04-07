@@ -26,16 +26,20 @@ const SurveyCreator = () => {
   };
 
   const addQuestion = () => {
-    setSurvey({
-      ...survey,
-      questions: [...survey.questions, { text: '', choices: [''] }]
-    });
+    if (survey.questions.length < 10) {
+      setSurvey({
+        ...survey,
+        questions: [...survey.questions, { text: '', choices: [''] }]
+      });
+    }
   };
 
   const removeQuestion = (index) => {
-    const newQuestions = [...survey.questions];
-    newQuestions.splice(index, 1);
-    setSurvey({ ...survey, questions: newQuestions });
+    if (survey.questions.length > 1) {
+      const newQuestions = [...survey.questions];
+      newQuestions.splice(index, 1);
+      setSurvey({ ...survey, questions: newQuestions });
+    }
   };
 
   const addChoice = (questionIndex) => {
@@ -119,7 +123,11 @@ const SurveyCreator = () => {
           <div key={`question-${qIndex}`} className="space-y-3">
             <div className="flex items-center justify-between">
               <label htmlFor={`question-${qIndex}`} className="text-sm font-medium text-gray-700">Pergunta {qIndex + 1}:</label>
-              <button type="button" onClick={() => removeQuestion(qIndex)} className="text-xs text-red-600 hover:text-red-700">Remover Pergunta</button>
+              {survey.questions.length > 1 && (
+              <button type="button" onClick={() => removeQuestion(qIndex)} className="text-xs text-red-600 hover:text-red-700">
+                Remover Pergunta
+              </button>
+              )}
             </div>
             <input
               type="text"
@@ -144,7 +152,11 @@ const SurveyCreator = () => {
           </div>
         ))}
         <div className="flex justify-between items-center">
-          <button type="button" onClick={addQuestion} className="text-sm text-blue-600 hover:text-blue-700">Adicionar Pergunta</button>
+          {survey.questions.length < 10 && (
+            <button type="button" onClick={addQuestion} className="text-sm text-blue-600 hover:text-blue-700">
+              Adicionar Pergunta
+            </button>
+          )}
           <div>
             <button type="submit" className="text-white bg-blue-600 hover:bg-blue-700 rounded-md px-4 py-2 mr-2">Salvar Survey</button>
             <button type="button" onClick={handleCancel} className="text-gray-600 bg-white border border-gray-300 hover:bg-gray-50 rounded-md px-4 py-2">Cancelar</button>
