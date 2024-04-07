@@ -7,6 +7,7 @@ import Home from './components/Home';
 import Dashboard from './components/Dashboard';
 import PrivateRoute from './components/PrivateRoute';
 import SurveyCreator from './components/SurveyCreator';
+import SurveyResponder from './components/SurveyResponder';
 
 const App = () => {
   return (
@@ -27,6 +28,14 @@ const App = () => {
             element={
               <PrivateRoute>
                 <SurveyCreator />
+              </PrivateRoute>
+            } 
+          />
+          <Route 
+            path="/respond-survey" 
+            element={
+              <PrivateRoute>
+                <SurveyResponder />
               </PrivateRoute>
             } 
           />
