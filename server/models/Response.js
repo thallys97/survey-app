@@ -1,24 +1,28 @@
 const mongoose = require('mongoose');
 
-// Esquema para as respostas
 const responseSchema = new mongoose.Schema({
   survey: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Survey',
     required: true
   },
-  responses: [{
-    questionId: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true
-    },
-    choice: String
-  }],
+  responses: [
+    {
+      questionId: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true
+      },
+      choice: {
+        type: String,
+        required: true
+      }
+    }
+  ],
   respondent: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
+    ref: 'User',
+    required: true
   }
-  // Adicione campos adicionais se necessário
 });
 
 module.exports = mongoose.model('Response', responseSchema);
