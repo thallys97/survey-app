@@ -1,4 +1,5 @@
 const Survey = require('../models/Survey');
+const Response = require('../models/Response');
 
 // Cria uma nova survey
 exports.createSurvey = async (req, res) => {
@@ -59,14 +60,23 @@ exports.closeSurvey = async (req, res) => {
 exports.submitResponse = async (req, res) => {
   try {
     const { surveyId, responses } = req.body;
+
+    // Crie um array de respostas com o formato correto
+    const formattedResponses = Object.entries(responses).map(([questionId, choice]) => ({
+      questionId: questionId,
+      choice: choice
+    }));
+
     const newResponse = new Response({
       survey: surveyId,
-      responses: responses,
-      respondent: req.user._id
+      responses: formattedResponses,
+      respondent: req.user._id // Assegure-se de que o usuário esteja autenticado
     });
-    await newResponse.save();
-    res.status(201).json(newResponse);
+
+    await newResponse.save(); // Salve a nova resposta no banco de dados
+    res.status(201).json(newResponse); // Envie a resposta criada de volta ao cliente
   } catch (error) {
+    console.error('Error submitting response:', error);
     res.status(500).json({ message: 'Error submitting response', error: error.message });
   }
 };
