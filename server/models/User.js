@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['SurveyCoordinator', 'SurveyRespondent'],
+    enum: ['SurveyCoordinator', 'SurveyRespondent', 'SurveyAdmin'],
     required: true,
     default: 'SurveyRespondent' // O padrão pode ser definido com base na lógica do seu aplicativo
   }
