@@ -6,11 +6,20 @@ module.exports = {
         res.status(401).json({ message: 'Usuário não autenticado' });
       }
     },
-    ensureCoordinator: function (req, res, next) {
-      if (req.user.role === 'SurveyCoordinator') {
+    ensureCoordinatorOrAdmin: function (req, res, next) {
+      if (req.user.role === 'SurveyCoordinator' || req.user.role === 'SurveyAdmin') {
         return next();
       } else {
         res.status(403).json({ message: 'Acesso negado' });
       }
+    },
+
+    ensureAdmin: function (req, res, next) {
+      if (req.user.role === 'SurveyAdmin') {
+        return next();
+      } else {
+        res.status(403).json({ message: 'Acesso restrito apenas para administradores' });
+      }
     }
   };
+
