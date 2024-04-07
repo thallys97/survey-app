@@ -14,12 +14,21 @@ exports.createSurvey = async (req, res) => {
 };
 
 // Lista apenas as surveys que estão abertas
-exports.getAllSurveys = async (req, res) => {
+exports.getOpenSurveys = async (req, res) => {
   try {
     const surveys = await Survey.find({ open: true });
     res.status(200).json(surveys);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching open surveys', error: error.message });
+  }
+};
+
+exports.getAllSurveys = async (req, res) => {
+  try {
+    const surveys = await Survey.find();
+    res.status(200).json(surveys);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching surveys', error: error.message });
   }
 };
 
