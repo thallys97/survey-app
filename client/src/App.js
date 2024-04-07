@@ -8,6 +8,7 @@ import Dashboard from './components/Dashboard';
 import PrivateRoute from './components/PrivateRoute';
 import SurveyCreator from './components/SurveyCreator';
 import SurveyResponder from './components/SurveyResponder';
+import UserManagement from './components/UserManagement';
 
 const App = () => {
   return (
@@ -36,6 +37,14 @@ const App = () => {
             element={
               <PrivateRoute>
                 <SurveyResponder />
+              </PrivateRoute>
+            } 
+          />
+          <Route 
+            path="/user-management" 
+            element={
+              <PrivateRoute>
+                <UserManagement />
               </PrivateRoute>
             } 
           />
