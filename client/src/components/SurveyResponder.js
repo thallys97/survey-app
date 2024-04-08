@@ -51,6 +51,17 @@ const SurveyResponder = () => {
     fetchSurveys();
   }, []);
 
+  const handleCloseSurvey = async (surveyId) => {
+    try {
+      await axiosInstance.put(`/api/surveys/close/${surveyId}`);
+      // Atualize a lista de surveys para remover a survey fechada
+      const updatedSurveysList = surveysList.filter(survey => survey._id !== surveyId);
+      setSurveysList(updatedSurveysList);
+    } catch (error) {
+      console.error('Erro ao fechar survey', error);
+    }
+  };
+
   const handleSubmit = async () => {
     if (!isSurveyComplete()) {
       alert('Por favor, responda a todas as perguntas antes de submeter.');
@@ -133,6 +144,12 @@ const SurveyResponder = () => {
               onClick={() => selectSurvey(survey._id)}
             >
               {survey.title}
+            </button>
+            <button
+              className="ml-4 py-1 px-2 bg-red-500 text-white rounded hover:bg-red-700"
+              onClick={() => handleCloseSurvey(survey._id)}
+            >
+              Fechar Survey
             </button>
           </li>
         ))}
