@@ -16,7 +16,7 @@ const surveySchema = new mongoose.Schema({
   },
   open: {
     type: Boolean,
-    default: true
+    default: false
   }
   // Campos adicionais para datas de início e fim, etc, podem ser adicionados aqui
 });
