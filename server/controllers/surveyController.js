@@ -89,7 +89,11 @@ exports.openSurvey = async (req, res) => {
 // Fechar uma survey
 exports.closeSurvey = async (req, res) => {
   try {
-    const survey = await Survey.findByIdAndUpdate(req.params.id, { open: false }, { new: true });
+    const survey = await Survey.findByIdAndUpdate(
+      req.params.id, 
+      { open: false }, 
+      { new: true }
+    );
     res.status(200).json(survey);
   } catch (error) {
     res.status(500).json({ message: 'Error closing survey', error: error.message });
