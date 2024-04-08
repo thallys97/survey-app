@@ -13,6 +13,25 @@ exports.createSurvey = async (req, res) => {
   }
 };
 
+exports.getWaitingSurveys = async (req, res) => {
+  try {
+    const surveys = await Survey.find({ open: false }).lean();
+    const waitingSurveys = [];
+
+    for (let survey of surveys) {
+      const responses = await Response.find({ survey: survey._id });
+      if (responses.length === 0) {
+        waitingSurveys.push(survey);
+      }
+    }
+
+    res.json(waitingSurveys);
+  } catch (error) {
+    console.error("Error fetching waiting surveys: ", error);
+    res.status(500).json({ message: "Error fetching waiting surveys", error: error.message });
+  }
+};
+
 // Lista apenas as surveys que estão abertas
 exports.getOpenSurveys = async (req, res) => {
   try {
