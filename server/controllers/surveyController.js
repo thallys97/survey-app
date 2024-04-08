@@ -64,13 +64,25 @@ exports.getSurveyById = async (req, res) => {
   }
 };
 
+// Método para deletar uma survey
+exports.deleteSurvey = async (req, res) => {
+  try {
+    const surveyId = req.params.id;
+    await Survey.findByIdAndDelete(surveyId);
+    res.status(200).json({ message: 'Survey deleted successfully.' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error deleting survey', error: error.message });
+  }
+};
+
 // Abrir uma survey
 exports.openSurvey = async (req, res) => {
   try {
-    const survey = await Survey.findByIdAndUpdate(req.params.id, { open: true }, { new: true });
-    res.status(200).json(survey);
+    const surveyId = req.params.id;
+    await Survey.findByIdAndUpdate(surveyId, { open: true });
+    res.status(200).json({ message: 'Survey published successfully.' });
   } catch (error) {
-    res.status(500).json({ message: 'Error opening survey', error: error.message });
+    res.status(500).json({ message: 'Error publishing survey', error: error.message });
   }
 };
 
