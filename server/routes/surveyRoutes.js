@@ -7,6 +7,8 @@ const { ensureAuth, ensureCoordinatorOrAdmin } = require('../middlewares/authMid
 // POST para criar uma nova survey - apenas usuários autenticados
 router.post('/', ensureAuth, ensureCoordinatorOrAdmin, surveyController.createSurvey);
 
+router.get('/waiting', ensureAuth, surveyController.getWaitingSurveys);
+
 // GET para listar todas as surveys
 router.get('/', surveyController.getAllSurveys);
 
