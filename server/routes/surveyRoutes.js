@@ -12,6 +12,9 @@ router.get('/waiting', ensureAuth, surveyController.getWaitingSurveys);
 // GET para listar todas as surveys
 router.get('/', surveyController.getAllSurveys);
 
+// DELETE para deletar uma survey
+router.delete('/:id', ensureAuth, ensureCoordinatorOrAdmin, surveyController.deleteSurvey);
+
 // GET para obter todas as surveys abertas
 router.get('/open', surveyController.getOpenSurveys);
 
