@@ -9,6 +9,8 @@ router.post('/', ensureAuth, ensureCoordinatorOrAdmin, surveyController.createSu
 
 router.get('/waiting', ensureAuth, surveyController.getWaitingSurveys);
 
+router.get('/responded', ensureAuth, surveyController.getRespondedSurveys);
+
 // GET para listar todas as surveys
 router.get('/', surveyController.getAllSurveys);
 
