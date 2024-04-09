@@ -11,6 +11,9 @@ router.get('/waiting', ensureAuth, surveyController.getWaitingSurveys);
 
 router.get('/responded', ensureAuth, surveyController.getRespondedSurveys);
 
+// GET para obter os resultados de uma survey
+router.get('/results/:id', ensureAuth, surveyController.getSurveyResults);
+
 // GET para listar todas as surveys
 router.get('/', surveyController.getAllSurveys);
 
