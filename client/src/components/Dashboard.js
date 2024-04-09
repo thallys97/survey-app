@@ -20,6 +20,10 @@ const Dashboard = () => {
     navigate('/waiting-surveys');
   };
 
+  const handleCheckSurveyResults = () => {
+    navigate('/responded-surveys');
+  };
+
   return (
     <div>
       <h1>Dashboard</h1>
@@ -27,6 +31,7 @@ const Dashboard = () => {
       <button onClick={handleCreateSurvey}>Criar survey</button>
       <button onClick={handleWaitingSurveys}>Surveys em Espera</button>
       <button onClick={handleRespondToSurvey}>Checar surveys abertas</button>
+      <button onClick={handleCheckSurveyResults}>Checar resultados de surveys</button>
       {user.role === 'SurveyAdmin' && (
         <button onClick={() => navigate('/user-management')} className="p-2 bg-blue-500 text-white rounded mt-4">
           Gerenciar Usuários
