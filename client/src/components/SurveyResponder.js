@@ -145,6 +145,7 @@ const SurveyResponder = () => {
             >
               {survey.title}
             </button>
+             <span>{`Quantidade de vezes respondida: ${survey.responsesCount}`}</span> {/*Adicionado contador de respostas */}
             <button
               className="ml-4 py-1 px-2 bg-red-500 text-white rounded hover:bg-red-700"
               onClick={() => handleCloseSurvey(survey._id)}
