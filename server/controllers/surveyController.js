@@ -90,14 +90,25 @@ exports.getSurveyResults = async (req, res) => {
 exports.getOpenSurveys = async (req, res) => {
   try {
     // Recupere todas as surveys que estão abertas
-    let surveys = await Survey.find({ open: true });
-    
+    let surveys = await Survey.find({ open: true }).lean();
+
     // Filtre as surveys para excluir aquelas já respondidas pelo usuário
     const respondedSurveys = await Response.find({ respondent: req.user._id });
     const respondedSurveyIds = respondedSurveys.map((response) => response.survey.toString());
     surveys = surveys.filter((survey) => !respondedSurveyIds.includes(survey._id.toString()));
-    
-    res.status(200).json(surveys);
+
+    // Execute a contagem de respostas para cada survey
+    const surveysWithCounts = await Promise.all(surveys.map(async (survey) => {
+      const responsesCount = await Response.countDocuments({ survey: survey._id });
+      return { ...survey, responsesCount };
+    }));
+
+    // Remova a contagem de respostas daquelas surveys às quais o usuário já respondeu
+    const filteredSurveys = surveysWithCounts.filter(survey => 
+      !respondedSurveyIds.includes(survey._id.toString())
+    );
+
+    res.status(200).json(filteredSurveys);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching open surveys', error: error.message });
   }
