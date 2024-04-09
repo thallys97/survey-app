@@ -51,6 +51,41 @@ exports.getRespondedSurveys = async (req, res) => {
   }
 };
 
+exports.getSurveyResults = async (req, res) => {
+  try {
+    const surveyId = req.params.id;
+    const survey = await Survey.findById(surveyId).lean();
+    const responses = await Response.find({ survey: surveyId });
+
+    // Inicializar resultados
+    let results = survey.questions.map(question => ({
+      questionId: question._id.toString(),
+      text: question.text,
+      choices: question.choices.map(choice => ({
+        choice: choice,
+        count: 0
+      }))
+    }));
+
+    // Contar as respostas
+    responses.forEach(response => {
+      response.responses.forEach(answer => {
+        const questionResult = results.find(result => result.questionId === answer.questionId.toString());
+        if (questionResult) {
+          const choice = questionResult.choices.find(c => c.choice === answer.choice);
+          if (choice) {
+            choice.count++;
+          }
+        }
+      });
+    });
+
+    res.json({ survey, results });
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching survey results', error: error.message });
+  }
+};
+
 // Lista apenas as surveys que estão abertas
 exports.getOpenSurveys = async (req, res) => {
   try {
