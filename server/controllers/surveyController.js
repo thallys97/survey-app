@@ -86,10 +86,17 @@ exports.getSurveyResults = async (req, res) => {
   }
 };
 
-// Lista apenas as surveys que estão abertas
+// Lista apenas as surveys que estão abertas e ainda não respondidas pelo usuário
 exports.getOpenSurveys = async (req, res) => {
   try {
-    const surveys = await Survey.find({ open: true });
+    // Recupere todas as surveys que estão abertas
+    let surveys = await Survey.find({ open: true });
+    
+    // Filtre as surveys para excluir aquelas já respondidas pelo usuário
+    const respondedSurveys = await Response.find({ respondent: req.user._id });
+    const respondedSurveyIds = respondedSurveys.map((response) => response.survey.toString());
+    surveys = surveys.filter((survey) => !respondedSurveyIds.includes(survey._id.toString()));
+    
     res.status(200).json(surveys);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching open surveys', error: error.message });
