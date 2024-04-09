@@ -10,6 +10,7 @@ import SurveyCreator from './components/SurveyCreator';
 import SurveyResponder from './components/SurveyResponder';
 import UserManagement from './components/UserManagement';
 import WaitingSurveys from './components/WaitingSurveys';
+import RespondedSurveys from './components/RespondedSurveys';
 
 const App = () => {
   return (
@@ -54,6 +55,14 @@ const App = () => {
             element={
               <PrivateRoute>
                 <WaitingSurveys />
+              </PrivateRoute>
+            } 
+          />
+          <Route 
+            path="/responded-surveys" 
+            element={
+              <PrivateRoute>
+                <RespondedSurveys />
               </PrivateRoute>
             } 
           />
