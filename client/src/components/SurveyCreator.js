@@ -88,16 +88,27 @@ const SurveyCreator = () => {
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent default form submission
     if (!isFormValid()) {
-        return; // Se a validação falhar, não prosseguir com a submissão
-      }
+      return; // Se a validação falhar, não prosseguir com a submissão
+    }
     try {
       const response = await axiosInstance.post('/api/surveys', survey);
       console.log(response.data);
-      // Redirect or inform the user of success
+  
+      // Reset form after successful submission
+      resetForm();
+      alert('Survey criada com sucesso!');
+  
     } catch (error) {
       console.error('Erro ao criar survey', error);
       // Handle the error state
     }
+  };
+  
+  const resetForm = () => {
+    setSurvey({
+      title: '',
+      questions: [{ text: '', choices: [''] }]
+    });
   };
 
   const handleCancel = () => {
