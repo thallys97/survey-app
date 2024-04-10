@@ -12,8 +12,13 @@ const authService = {
       const response = await axiosInstance.get('/auth/current_user');
       return response.data;
     } catch (error) {
-      console.error('Erro ao buscar o usuário atual', error);
-      return null;
+      if (error.response && error.response.status === 401) {
+        // Usuário não está autenticado
+        console.log('Usuário não está autenticado');
+        return null;
+      } else {
+        console.error('Erro ao buscar o usuário atual', error);
+      }
     }
   },
 
