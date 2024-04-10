@@ -9,11 +9,17 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const fetchCurrentUser = async () => {
-      const fetchedUser = await authService.fetchCurrentUser();
-      setUser(fetchedUser);
+      try {
+        const fetchedUser = await authService.fetchCurrentUser();
+        if (fetchedUser) {
+          setUser(fetchedUser);
+        }
+      } catch (error) {
+        console.error('Erro ao buscar o usuário atual', error);
+      }
       setLoading(false);
     };
-
+  
     fetchCurrentUser();
   }, []);
 
