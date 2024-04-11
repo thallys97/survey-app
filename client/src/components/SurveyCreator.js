@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import axiosInstance from '../api/axiosInstance';
 import { useNavigate } from 'react-router-dom';
+import ErrorMessage from './ErrorMessage';
+import SuccessMessage from './SuccessMessage';
 
 const SurveyCreator = () => {
   const navigate = useNavigate(); // Inicializar useNavigate
@@ -8,6 +10,10 @@ const SurveyCreator = () => {
     title: '',
     questions: [{ text: '', choices: [''] }]
   });
+  const [error, setError] = useState(''); // Estado para armazenar a mensagem de erro
+  const [showError, setShowError] = useState(false); // Estado para controlar a visibilidade da mensagem de erro
+  const [success, setSuccess] = useState('');
+  const [showSuccess, setShowSuccess] = useState(false);
 
   const handleTitleChange = (e) => {
     setSurvey({ ...survey, title: e.target.value });
@@ -61,22 +67,26 @@ const SurveyCreator = () => {
   
   const isFormValid = () => {
     if (!survey.title.trim()) {
-      alert("O título da survey não pode estar vazio.");
+      setError("O título da survey não pode estar vazio.");
+      setShowError(true);
       return false;
     }
   
     for (let question of survey.questions) {
       if (!question.text.trim()) {
-        alert("Cada pergunta deve ter um texto.");
+        setError("Cada pergunta deve ter um texto.");
+        setShowError(true);
         return false;
       }
       if (question.choices.length < 2) {
-        alert("Cada pergunta deve ter pelo menos duas opções.");
+        setError("Cada pergunta deve ter pelo menos duas opções.");
+        setShowError(true);
         return false;
       }
       for (let choice of question.choices) {
         if (!choice.trim()) {
-          alert("Todas as opções de resposta devem conter texto.");
+          setError("Todas as opções de resposta devem conter texto.");
+          setShowError(true);
           return false;
         }
       }
@@ -96,7 +106,8 @@ const SurveyCreator = () => {
   
       // Reset form after successful submission
       resetForm();
-      alert('Survey criada com sucesso!');
+      setSuccess('Survey criada com sucesso!');
+      setShowSuccess(true); // Exiba a mensagem de sucesso
   
     } catch (error) {
       console.error('Erro ao criar survey', error);
@@ -119,8 +130,18 @@ const SurveyCreator = () => {
     navigate('/dashboard'); // Redirecionar para o dashboard
   };
 
+  const handleCloseError = () => {
+    setShowError(false);
+  };
+
+  const handleCloseSuccess = () => {
+    setShowSuccess(false);
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 py-10 flex justify-center">
+      <ErrorMessage message={error} visible={showError} onClose={handleCloseError} />
+      <SuccessMessage message={success} visible={showSuccess} onClose={handleCloseSuccess} />
       <div className="w-full max-w-3xl bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
         <h2 className="text-3xl font-bold leading-tight text-gray-900">Criar Survey</h2>
         <form onSubmit={handleSubmit} className="mt-8">
