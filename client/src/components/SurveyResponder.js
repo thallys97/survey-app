@@ -1,14 +1,15 @@
 // Em algum lugar no topo do seu componente, junto aos outros imports
 import React, { useState, useEffect } from 'react';
 import axiosInstance from '../api/axiosInstance';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
+import DashboardButton from './DashboardButton';
 
 const SurveyResponder = () => {
   const [surveysList, setSurveysList] = useState([]);
   const [selectedSurvey, setSelectedSurvey] = useState(null);
   const [answers, setAnswers] = useState({});
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   
 
@@ -83,7 +84,7 @@ const SurveyResponder = () => {
   const handleCancel = () => {
     setSelectedSurvey(null);
     setAnswers({});
-    navigate('/dashboard'); // Use o useNavigate para redirecionar
+    // navigate('/dashboard'); // Use o useNavigate para redirecionar
   };
 
   if (loading) {
@@ -136,6 +137,7 @@ const SurveyResponder = () => {
   return (
     <div className="max-w-2xl mx-auto p-6 bg-white shadow-md rounded-md">
       <h2 className="text-2xl font-bold mb-4 text-gray-700">Surveys Disponíveis</h2>
+      <DashboardButton />
       <ul>
         {surveysList.map((survey) => (
           <li key={survey._id} className="mb-4">
