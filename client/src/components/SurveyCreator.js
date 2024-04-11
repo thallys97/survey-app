@@ -133,37 +133,37 @@ const SurveyCreator = () => {
               id="title"
               value={survey.title}
               onChange={handleTitleChange}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />
           </div>
 
           {survey.questions.map((question, qIndex) => (
-            <div key={`question-${qIndex}`} className="space-y-3">
+            <div key={`question-${qIndex}`} className="mb-6">
               <div className="flex items-center justify-between">
-                <label htmlFor={`question-${qIndex}`} className="text-sm font-medium text-gray-700">Pergunta {qIndex + 1}:</label>
+                <label htmlFor={`question-${qIndex}`} className="block text-gray-700 text-sm font-bold mb-2">Pergunta {qIndex + 1}:</label>
                 {survey.questions.length > 1 && (
                 <button type="button" onClick={() => removeQuestion(qIndex)} className="text-xs text-red-600 hover:text-red-700">
                   Remover Pergunta
                 </button>
                 )}
               </div>
-              <input
-                type="text"
+              <textarea
                 id={`question-${qIndex}`}
                 value={question.text}
                 onChange={(e) => handleQuestionChange(qIndex, e)}
-                className="block w-full border-gray-300 shadow-sm rounded-md"
+                rows="2"
+                className="w-full px-3 py-2 text-gray-700 border border-gray-700 rounded-lg focus:outline-none"
               />
               {question.choices.map((choice, cIndex) => (
+                <div key={`choice-${qIndex}-${cIndex}`} className="mt-2 flex items-center">
+                <label htmlFor={`choice-${qIndex}-${cIndex}`} className="inline-block w-16 text-gray-700 text-sm font-bold mr-2">Opção {cIndex + 1}:</label>
                 <div key={`choice-${qIndex}-${cIndex}`} className="flex items-center space-x-2">
-                <label htmlFor={`choice-${qIndex}-${cIndex}`} className="block text-sm font-medium text-gray-700">Opção {cIndex + 1}:</label>
-                <div key={`choice-${qIndex}-${cIndex}`} className="flex items-center space-x-2">
-                  <input
-                    type="text"
+                <textarea
                     id={`choice-${qIndex}-${cIndex}`}
                     value={choice}
                     onChange={(e) => handleChoiceChange(qIndex, cIndex, e)}
-                    className="block w-full border-gray-300 shadow-sm rounded-md"
+                    rows="1"
+                    className="flex-1 px-3 py-2 text-gray-700 border border-gray-700 rounded-lg focus:outline-none"
                   />
                   {question.choices.length > 1 && (
                     <button type="button" onClick={() => removeChoice(qIndex, cIndex)} className="text-xs text-red-600 hover:text-red-700">
