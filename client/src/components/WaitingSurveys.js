@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axiosInstance from '../api/axiosInstance';
+import DashboardButton from './DashboardButton';
 
 const WaitingSurveys = () => {
   const [waitingSurveys, setWaitingSurveys] = useState([]);
@@ -73,6 +74,7 @@ const WaitingSurveys = () => {
   return (
     <div>
       <h2>Surveys em Espera</h2>
+      <DashboardButton />
       <ul>
         {waitingSurveys.map((survey) => (
           <li key={survey._id} onClick={() => handleSelectSurvey(survey._id)}>{survey.title}</li>
