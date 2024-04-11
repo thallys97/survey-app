@@ -1,19 +1,29 @@
 import React, { useContext } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
 import LogoutButton from './LogoutButton';
+import DashboardButton from './DashboardButton';
 
 const Home = () => {
   const { user, login } = useContext(AuthContext);
 
   return (
-    <div>
+    <div className="h-screen flex flex-col items-center justify-center bg-gray-100">
       {user ? (
-        <>
-          <p>Bem-vindo, {user.displayName}!</p>
-          <LogoutButton /> {/* Renderize o LogoutButton se o usuário estiver logado */}
-        </>
+        <div className="text-center">
+          <h1 className="text-4xl font-bold text-gray-800 mb-4">Bem-vindo, {user.displayName}!</h1>
+          <DashboardButton />
+          <LogoutButton />
+        </div>
       ) : (
-        <button onClick={login}>Login com Google</button>
+        <div className="text-center">
+          <h1 className="text-4xl font-bold text-gray-800 mb-4">Bem-vindo, visitante!</h1>
+          <button
+            onClick={login}
+            className="text-white bg-blue-500 px-4 py-2 rounded-md hover:bg-blue-600"
+          >
+            Login com Google
+          </button>
+        </div>
       )}
     </div>
   );
