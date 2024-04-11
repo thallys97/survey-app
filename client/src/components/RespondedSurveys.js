@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axiosInstance from '../api/axiosInstance';
+import DashboardButton from './DashboardButton';
 import { Pie } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -150,6 +151,7 @@ const RespondedSurveys = () => {
       ) : (
         <div>
           <h2>Surveys Respondidas</h2>
+          <DashboardButton />
           <ul>
             {respondedSurveys.map(survey => (
               <li key={survey._id} onClick={() => viewSurveyResults(survey._id)}>{survey.title}</li>
