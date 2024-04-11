@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axiosInstance from '../api/axiosInstance';
+import DashboardButton from './DashboardButton';
 import { AuthContext } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
@@ -37,6 +38,8 @@ const UserManagement = () => {
 
   return (
     <div className="container mx-auto p-4">
+      <DashboardButton />
+      <h1 className="text-2xl font-bold mb-4">Trocar cargo de usuário</h1>
       <input
         type="text"
         placeholder="Procurar usuário"
