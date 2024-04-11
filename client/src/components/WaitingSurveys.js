@@ -68,20 +68,34 @@ const WaitingSurveys = () => {
 
   if (selectedSurvey) {
     return (
-      <div className="container mx-auto p-4">
-        <h2 className="text-2xl font-bold mb-4">{selectedSurvey.title}</h2>
-        {selectedSurvey.questions.map((question, index) => (
-          <div key={index} className="mb-2">
-            <p className="font-semibold">{question.text}</p>
-            {question.choices.map((choice, choiceIndex) => (
-              <p key={choiceIndex} className="ml-4">{choice}</p>
-            ))}
+      <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
+        <div className="w-full max-w-2xl bg-white rounded-lg shadow overflow-hidden">
+          <div className="px-6 py-4">
+            <h2 className="text-xl font-bold text-center mb-4">{selectedSurvey.title}</h2>
+            <div className="space-y-3">
+              {selectedSurvey.questions.map((question, index) => (
+                <div key={index} className="text-left">
+                  <h4 className="text-lg font-medium">{question.text}</h4>
+                  <ul className="my-2 list-disc list-inside">
+                    {question.choices.map((choice, choiceIndex) => (
+                      <li key={choiceIndex} className="text-gray-700">{choice}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
           </div>
-        ))}
-        <div className="mt-4 space-x-2">
-          <button onClick={handleBackToList} className="bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 px-4 rounded">Voltar</button>
-          <button onClick={() => handlePublishSurvey(selectedSurvey._id)} className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">Publicar</button>
-          <button onClick={() => handleDeleteSurvey(selectedSurvey._id)} className="bg-red-500 hover:bg-red-700 text-white py-2 px-4 rounded">Apagar</button>
+          <div className="flex justify-evenly py-4 bg-gray-100">
+            <button onClick={handleBackToList} className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded transition duration-300">
+              Voltar
+            </button>
+            <button onClick={() => handlePublishSurvey(selectedSurvey._id)} className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition duration-300">
+              Publicar
+            </button>
+            <button onClick={() => handleDeleteSurvey(selectedSurvey._id)} className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded transition duration-300">
+              Apagar
+            </button>
+          </div>
         </div>
       </div>
     );
