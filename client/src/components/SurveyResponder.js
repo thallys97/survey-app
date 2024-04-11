@@ -87,9 +87,7 @@ const SurveyResponder = () => {
     // navigate('/dashboard'); // Use o useNavigate para redirecionar
   };
 
-  if (loading) {
-    return <div>Carregando...</div>;
-  }
+  
 
   if (selectedSurvey) {
     return (
@@ -134,31 +132,42 @@ const SurveyResponder = () => {
     );
   }
 
+  const renderSurveysList = () => {
+    if (loading) return <div className="text-center text-lg">Carregando...</div>;
+    
+    if (surveysList.length === 0) return <div className="text-center text-lg">Nenhuma survey disponível para resposta.</div>;
+
+    return surveysList.map((survey) => (
+      <div key={survey._id} className="flex flex-col items-center mb-4">
+        <button
+          onClick={() => selectSurvey(survey._id)}
+          className="text-lg bg-indigo-100 text-indigo-700 hover:bg-indigo-200 px-6 py-2 rounded-lg shadow my-2 w-full text-center"
+        >
+          {survey.title}
+        </button>
+        <span className="text-sm text-gray-600">{`Quantidade de vezes respondida: ${survey.responsesCount}`}</span>
+        <button
+          onClick={() => handleCloseSurvey(survey._id)}
+          className="text-white bg-red-500 hover:bg-red-600 rounded-lg shadow px-4 py-2 my-2"
+        >
+          Fechar Survey
+        </button>
+      </div>
+    ));
+  };
+
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-white shadow-md rounded-md">
-      <h2 className="text-2xl font-bold mb-4 text-gray-700">Surveys Disponíveis</h2>
-      <DashboardButton />
-      <ul>
-        {surveysList.map((survey) => (
-          <li key={survey._id} className="mb-4">
-            <button
-              className="text-lg text-blue-700 hover:underline"
-              onClick={() => selectSurvey(survey._id)}
-            >
-              {survey.title}
-            </button>
-             <span>{`Quantidade de vezes respondida: ${survey.responsesCount}`}</span> {/*Adicionado contador de respostas */}
-            <button
-              className="ml-4 py-1 px-2 bg-red-500 text-white rounded hover:bg-red-700"
-              onClick={() => handleCloseSurvey(survey._id)}
-            >
-              Fechar Survey
-            </button>
-          </li>
-        ))}
-      </ul>
+    <div className="flex flex-col justify-center items-center h-screen bg-gray-100 px-4">
+      <div className="w-full max-w-3xl bg-white rounded-lg shadow p-6">
+        <DashboardButton />
+        <h2 className="text-2xl font-bold text-center mb-6">Surveys Disponíveis</h2>
+        <div className="mt-6">
+          {renderSurveysList()}
+        </div>
+      </div>
     </div>
   );
+
 
 };
 
