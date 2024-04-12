@@ -101,64 +101,75 @@ const RespondedSurveys = () => {
 
   return (
     <div>
-      
-      {selectedSurvey ? (
-        <div>
-          <h3>{selectedSurvey.title}</h3>
-          <table>
-            <thead>
-              <tr>
-                <th>Pergunta</th>
-                {[...Array(maxOptionsCount())].map((_, index) => (
-                  <th key={index}>Opção {index + 1}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {surveyResults.map((result, index) => (
-                <tr key={index}>
-                  {/* <td>{result.text}</td> */}
-                  <td>Pergunta {index + 1}</td>
-                  {[...Array(maxOptionsCount())].map((_, cIndex) => {
-                    // Verifica se existe a escolha para aquela coluna, caso contrário renderiza "N/A"
-                    const choiceResult = result.choices[cIndex];
-                    return (
-                      <td key={cIndex}>
-                        {choiceResult ? choiceResult.count : 'N/A'}
-                      </td>
-                    );
-                  })}
+        {selectedSurvey ? (
+          <div>
+            <h3>{selectedSurvey.title}</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>Pergunta</th>
+                  {[...Array(maxOptionsCount())].map((_, index) => (
+                    <th key={index}>Opção {index + 1}</th>
+                  ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
-          {renderPieCharts()}
-          <button onClick={() => setSelectedSurvey(null)}>Voltar às Surveys</button>
-          <br />
-          <br />
-          <p>Perguntas e Opções</p>
-          <br />
-          <br />
-          {selectedSurvey.questions.map((question, index) => (
-            <div key={index}>
-              <p>{index + 1}. {question.text}</p>
-              {question.choices.map((choice, choiceIndex) => (
-                <p key={choiceIndex}>{choice}</p>
-              ))}
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div>
-          <h2>Surveys Respondidas</h2>
-          <DashboardButton />
-          <ul>
-            {respondedSurveys.map(survey => (
-              <li key={survey._id} onClick={() => viewSurveyResults(survey._id)}>{survey.title}</li>
+              </thead>
+              <tbody>
+                {surveyResults.map((result, index) => (
+                  <tr key={index}>
+                    {/* <td>{result.text}</td> */}
+                    <td>Pergunta {index + 1}</td>
+                    {[...Array(maxOptionsCount())].map((_, cIndex) => {
+                      // Verifica se existe a escolha para aquela coluna, caso contrário renderiza "N/A"
+                      const choiceResult = result.choices[cIndex];
+                      return (
+                        <td key={cIndex}>
+                          {choiceResult ? choiceResult.count : 'N/A'}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            {renderPieCharts()}
+            <button onClick={() => setSelectedSurvey(null)}>Voltar às Surveys</button>
+            <br />
+            <br />
+            <p>Perguntas e Opções</p>
+            <br />
+            <br />
+            {selectedSurvey.questions.map((question, index) => (
+              <div key={index}>
+                <p>{index + 1}. {question.text}</p>
+                {question.choices.map((choice, choiceIndex) => (
+                  <p key={choiceIndex}>{choice}</p>
+                ))}
+              </div>
             ))}
-          </ul>
-        </div>
-      )}
+          </div>
+        ) : (
+          <div className="min-h-screen bg-gray-100 flex justify-center items-center">
+            <div className="container mx-auto p-4">
+                <div className="bg-white rounded shadow-md max-w-2xl mx-auto p-6">
+                  <DashboardButton />
+                  <h2 className="text-2xl font-bold text-center mb-4">Surveys Respondidas</h2>
+                  {respondedSurveys.length > 0 ? (
+                    <ul className="space-y-4">
+                      {respondedSurveys.map(survey => (
+                        <li key={survey._id} 
+                            className="list-none bg-blue-100 rounded hover:bg-blue-200 cursor-pointer p-4 text-center"
+                            onClick={() => viewSurveyResults(survey._id)}>
+                          {survey.title}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="text-center text-gray-600">Não há surveys respondidas.</p>
+                  )}
+                </div>
+            </div>  
+          </div>
+        )}
     </div>
   );
 };
