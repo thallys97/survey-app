@@ -3,12 +3,15 @@ import React, { useState, useEffect } from 'react';
 import axiosInstance from '../api/axiosInstance';
 // import { useNavigate } from 'react-router-dom';
 import DashboardButton from './DashboardButton';
+import ErrorMessage from './ErrorMessage';
 
 const SurveyResponder = () => {
   const [surveysList, setSurveysList] = useState([]);
   const [selectedSurvey, setSelectedSurvey] = useState(null);
   const [answers, setAnswers] = useState({});
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  
   // const navigate = useNavigate();
 
   
@@ -63,9 +66,11 @@ const SurveyResponder = () => {
     }
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // Prevent the default form action
     if (!isSurveyComplete()) {
-      alert('Por favor, responda a todas as perguntas antes de submeter.');
+      setError('Por favor, responda a todas as perguntas antes de enviar o survey.');
+      
       return;
     }
   
@@ -91,43 +96,49 @@ const SurveyResponder = () => {
 
   if (selectedSurvey) {
     return (
-      <div className="max-w-2xl mx-auto p-6 bg-white shadow-md rounded-md">
-        <h2 className="text-2xl font-bold mb-4 text-gray-700">{selectedSurvey.title}</h2>
-        <form onSubmit={handleSubmit}>
-          {selectedSurvey.questions.map((question) => (
-            <div key={question._id} className="mb-4">
-              <p className="text-md font-semibold mb-2">{question.text}</p>
-              {question.choices.map((choice) => (
-                <label key={choice} className="inline-flex items-center mt-3">
-                  <input
-                    type="radio"
-                    className="form-radio h-5 w-5 text-gray-600"
-                    name={question._id}
-                    value={choice}
-                    onChange={() => handleAnswerChange(question._id, choice)}
-                    checked={answers[question._id] === choice}
-                  />
-                  <span className="ml-2 text-gray-700">{choice}</span>
-                </label>
-              ))}
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <ErrorMessage message={error} visible={!!error} onClose={() => setError('')} />
+        <div className="bg-white rounded-lg shadow-lg p-8 max-w-lg w-full">
+          <h2 className="text-xl md:text-2xl font-bold text-center mb-6">{selectedSurvey.title}</h2>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {selectedSurvey.questions.map((question) => (
+              <div key={question._id} className="text-gray-700">
+                <p className="font-semibold mb-2">{question.text}</p>
+                <div className="flex flex-col">
+                  {question.choices.map((choice) => (
+                    <label key={choice} className="flex items-center my-2">
+                      <input
+                        type="radio"
+                        className="form-radio text-indigo-600"
+                        name={question._id}
+                        value={choice}
+                        onChange={() => handleAnswerChange(question._id, choice)}
+                        checked={answers[question._id] === choice}
+                      />
+                      <span className="ml-3">{choice}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            ))}
+            <div className="flex justify-center mt-6 space-x-4">
+              <button
+                type="button"
+                className="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded shadow"
+                onClick={handleCancel}
+              >
+                Cancelar
+              </button>
+              <button
+                type="submit"
+                className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded shadow"
+                // disabled={!isSurveyComplete()} // Disable button if not all questions are answered
+              >
+                Submeter
+              </button>
             </div>
-          ))}
-          <div className="flex justify-end space-x-4">
-            <button
-              type="button"
-              className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-700"
-              onClick={handleCancel}
-            >
-              Cancelar
-            </button>
-            <button
-              type="submit"
-              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
-            >
-              Submeter
-            </button>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     );
   }
