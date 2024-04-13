@@ -6,6 +6,15 @@ module.exports = {
         res.status(401).json({ message: 'Usuário não autenticado' });
       }
     },
+
+    ensureRespondent: function (req, res, next) {
+      if (req.user.role === 'SurveyRespondent') {
+        return next();
+      } else {
+        res.status(403).json({ message: 'Acesso negado' });
+      }
+    },
+
     ensureCoordinatorOrAdmin: function (req, res, next) {
       if (req.user.role === 'SurveyCoordinator' || req.user.role === 'SurveyAdmin') {
         return next();
