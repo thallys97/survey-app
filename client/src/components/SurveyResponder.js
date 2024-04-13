@@ -1,11 +1,13 @@
 // Em algum lugar no topo do seu componente, junto aos outros imports
-import React, { useState, useEffect } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
+import { AuthContext } from '../contexts/AuthContext';
 import axiosInstance from '../api/axiosInstance';
 // import { useNavigate } from 'react-router-dom';
 import DashboardButton from './DashboardButton';
 import ErrorMessage from './ErrorMessage';
 
 const SurveyResponder = () => {
+  const { user } = useContext(AuthContext);
   const [surveysList, setSurveysList] = useState([]);
   const [selectedSurvey, setSelectedSurvey] = useState(null);
   const [answers, setAnswers] = useState({});
@@ -80,7 +82,11 @@ const SurveyResponder = () => {
         responses: answers
       });
       console.log(response.data);
-      // Aqui você pode redirecionar para uma página de agradecimento ou exibir uma mensagem de sucesso.
+      setSelectedSurvey(null);
+      setAnswers({});
+      setError('');
+      window.location.reload();
+      
     } catch (error) {
       console.error('Erro ao submeter respostas', error);
     }
@@ -127,8 +133,9 @@ const SurveyResponder = () => {
                 className="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded shadow"
                 onClick={handleCancel}
               >
-                Cancelar
+                Voltar
               </button>
+              {user.role === 'SurveyRespondent' && (
               <button
                 type="submit"
                 className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded shadow"
@@ -136,6 +143,7 @@ const SurveyResponder = () => {
               >
                 Submeter
               </button>
+              )}
             </div>
           </form>
         </div>
@@ -148,23 +156,29 @@ const SurveyResponder = () => {
     
     if (surveysList.length === 0) return <div className="text-center text-lg">Nenhuma survey disponível para resposta.</div>;
 
-    return surveysList.map((survey) => (
-      <div key={survey._id} className="flex flex-col items-center mb-4">
-        <button
-          onClick={() => selectSurvey(survey._id)}
-          className="text-lg bg-indigo-100 text-indigo-700 hover:bg-indigo-200 px-6 py-2 rounded-lg shadow my-2 w-full text-center"
-        >
-          {survey.title}
-        </button>
-        <span className="text-sm text-gray-600">{`Quantidade de vezes respondida: ${survey.responsesCount}`}</span>
-        <button
-          onClick={() => handleCloseSurvey(survey._id)}
-          className="text-white bg-red-500 hover:bg-red-600 rounded-lg shadow px-4 py-2 my-2"
-        >
-          Fechar Survey
-        </button>
-      </div>
-    ));
+    return (
+      <div className="overflow-auto h-96">
+        {surveysList.map((survey) => (
+          <div key={survey._id} className="flex flex-col items-center mb-4">
+            <button
+              onClick={() => selectSurvey(survey._id)}
+              className="text-lg bg-indigo-100 text-indigo-700 hover:bg-indigo-200 px-6 py-2 rounded-lg shadow my-2 w-full text-center"
+            >
+              {survey.title}
+            </button>
+            <span className="text-sm text-gray-600">{`Quantidade de vezes respondida: ${survey.responsesCount}`}</span>
+            {user.role !== 'SurveyRespondent' && (
+              <button
+                onClick={() => handleCloseSurvey(survey._id)}
+                className="text-white bg-red-500 hover:bg-red-600 rounded-lg shadow px-4 py-2 my-2"
+              >
+                Fechar Survey
+              </button>
+            )}
+          </div>
+        ))}
+     </div>   
+    );
   };
 
   return (
