@@ -12,9 +12,18 @@ const userRoutes = require('./routes/userRoutes');
 dotenv.config();
 
 // Conectar ao MongoDB
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-.then(() => console.log('MongoDB connected...'))
-.catch(err => console.log(err));
+
+mongoose.set('strictQuery', false);
+
+const connectDB = async () => {
+  try {
+    const conn = await mongoose.connect(process.env.MONGO_URI);
+    console.log(`MongoDB connected: ${conn.connection.host}`);
+  } catch (error) {
+    console.error('MongoDB connection error:', error);
+    process.exit(1);
+  }
+};
 
 // Inicializar o aplicativo Express
 const app = express();
@@ -64,4 +73,7 @@ app.use('/api/users', userRoutes);
 
 // Iniciar o servidor
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+connectDB().then(() => {
+  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+});
