@@ -70,6 +70,10 @@ app.use('/auth', authRoutes);
 app.use('/api/surveys', surveyRoutes);
 app.use('/api/users', userRoutes);
 
+// For Vercel, we might need to serve the app at the root route.
+app.get('/', (req, res) => {
+  res.json({ message: 'Server is up and running!' });
+});
 
 // Iniciar o servidor
 const PORT = process.env.PORT || 5000;
