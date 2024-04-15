@@ -50,7 +50,7 @@ app.use(session({
   cookie: {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production', // Assegura-se de que o cookie só será enviado com requisições HTTPS
-    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // Assegura-se de que o cookie não será enviado para sites de terceiros
+    sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax', // Assegura-se de que o cookie não será enviado para sites de terceiros
   }
 }));
 
