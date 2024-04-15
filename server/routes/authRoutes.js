@@ -15,14 +15,22 @@ router.get('/google/callback',
     req.session.user = req.user;
     console.log(req.user);
     console.log(req.session);
-    console.log(process.env.CLIENT_URL);
-    console.log(process.env.GOOGLE_CLIENT_SECRET);
-    console.log(process.env.GOOGLE_CLIENT_ID);
-    res.redirect(process.env.CLIENT_URL + '/dashboard'); // Ou para onde você deseja direcionar o usuário
+    console.log(req.sessionID);
+    console.log(req.isAuthenticated());
+    console.log(req.session.cookie);
+    
+    res.redirect(process.env.CLIENT_URL + '/dashboard', ); // Ou para onde você deseja direcionar o usuário
   }
 );
 
 router.get('/current_user', (req, res) => {
+
+  console.log(req.user);
+  console.log(req.session);
+  console.log(req.sessionID);
+  console.log(req.isAuthenticated());
+  console.log(req.session.cookie);
+
   if (req.isAuthenticated()) {
     res.send(req.user);
   } else {
