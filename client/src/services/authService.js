@@ -15,6 +15,10 @@ const authService = {
       if (error.response && error.response.status === 401) {
         // Usuário não está autenticado
         console.log('Usuário não está autenticado');
+        console.log(error);
+        console.log(error.response);
+        console.log(error.response.status);
+        
         return null;
       } else {
         console.error('Erro ao buscar o usuário atual', error);
