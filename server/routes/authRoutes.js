@@ -14,6 +14,10 @@ router.get('/google/callback',
     // Aqui você pode configurar o que será armazenado na sessão do usuário
     req.session.user = req.user;
     console.log(req.user);
+    console.log(req.session);
+    console.log(process.env.CLIENT_URL);
+    console.log(process.env.GOOGLE_CLIENT_SECRET);
+    console.log(process.env.GOOGLE_CLIENT_ID);
     res.redirect(process.env.CLIENT_URL + '/dashboard'); // Ou para onde você deseja direcionar o usuário
   }
 );
