@@ -51,6 +51,7 @@ app.use(session({
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production', // Só envia o cookie com requisições HTTPS se estiver em produção
     sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax', // Usa 'None' para CORS em produção
+    domain: '.vercel.app'
     // Outras configurações de cookie podem ser colocadas aqui
   }
 }));
