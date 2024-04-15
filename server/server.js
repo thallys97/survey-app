@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const session = require('express-session');
 const passport = require('passport');
+const MongoStore = require('connect-mongo');
 const authRoutes = require('./routes/authRoutes');
 const surveyRoutes = require('./routes/surveyRoutes');
 const userRoutes = require('./routes/userRoutes');
@@ -47,6 +48,7 @@ app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
+  store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
   cookie: {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production', // Só envia o cookie com requisições HTTPS se estiver em produção
