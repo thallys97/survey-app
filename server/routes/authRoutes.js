@@ -13,6 +13,7 @@ router.get('/google/callback',
   (req, res) => {
     // Aqui você pode configurar o que será armazenado na sessão do usuário
     req.session.user = req.user;
+    console.log(req.user);
     res.redirect(process.env.CLIENT_URL + '/dashboard'); // Ou para onde você deseja direcionar o usuário
   }
 );
