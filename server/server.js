@@ -49,10 +49,9 @@ app.use(session({
   saveUninitialized: false,
   cookie: {
     httpOnly: true,
-    secure: true,
-    sameSite: 'none',
-    // secure: process.env.NODE_ENV === 'production', // Assegura-se de que o cookie só será enviado com requisições HTTPS
-    // sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax', // Assegura-se de que o cookie não será enviado para sites de terceiros
+    secure: process.env.NODE_ENV === 'production', // Só envia o cookie com requisições HTTPS se estiver em produção
+    sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax', // Usa 'None' para CORS em produção
+    // Outras configurações de cookie podem ser colocadas aqui
   }
 }));
 
