@@ -2,37 +2,33 @@ import axiosInstance from '../api/axiosInstance';
 
 const authService = {
   login: () => {
-    // Redireciona o usuário para a rota de autenticação do Google no back-end
+    // Ainda redireciona para a rota de autenticação do Google no backend
     window.location.href = `${axiosInstance.defaults.baseURL}/auth/google`;
   },
 
   fetchCurrentUser: async () => {
-    // Busca o usuário atualmente autenticado
     try {
-      const response = await axiosInstance.get('/auth/current_user');
+      const response = await axiosInstance.get('/auth/current_user', {
+        headers: {
+          // Supõe que o token esteja armazenado no localStorage
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      });
       return response.data;
     } catch (error) {
+      console.log('Erro ao buscar o usuário atual', error);
       if (error.response && error.response.status === 401) {
-        // Usuário não está autenticado
         console.log('Usuário não está autenticado');
-        console.log(error);
-        console.log(error.response);
-        console.log(error.response.status);
-        
-        return null;
-      } else {
-        console.error('Erro ao buscar o usuário atual', error);
       }
+      return null;
     }
   },
 
   logout: async () => {
-    // Encerra a sessão do usuário
-    try {
-      await axiosInstance.get('/auth/logout');
-    } catch (error) {
-      console.error('Erro ao encerrar sessão', error);
-    }
+    // Para deslogar, removemos o token do localStorage
+    localStorage.removeItem('token');
+    // Redireciona para a página de login ou home
+    window.location.href = '/';
   }
 };
 
