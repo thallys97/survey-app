@@ -1,5 +1,6 @@
 const express = require('express');
 const passport = require('passport');
+const jwt = require('jsonwebtoken');
 const router = express.Router();
 
 // Rota para autenticar com Google
@@ -11,31 +12,42 @@ router.get('/google',
 router.get('/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
   (req, res) => {
-    // Aqui você pode configurar o que será armazenado na sessão do usuário
-    req.session.user = req.user;
-    console.log(req.user);
-    console.log(req.session);
-    console.log(req.sessionID);
-    console.log(req.isAuthenticated());
-    console.log(req.session.cookie);
+    // Usuário autenticado, agora gera um token JWT
+    const payload = {
+      id: req.user.id,
+      displayName: req.user.displayName,
+      email: req.user.email
+    };
     
-    res.redirect(process.env.CLIENT_URL + '/dashboard', ); // Ou para onde você deseja direcionar o usuário
+    // Assina o token JWT com o secret e expira em 1 dia
+    jwt.sign(
+      payload,
+      process.env.JWT_SECRET,
+      { expiresIn: '1d' },
+      (err, token) => {
+        if (err) {
+          console.error(err);
+          return res.status(500).json({ message: 'Erro ao gerar token JWT' });
+        }
+        // Redireciona para o cliente com o token
+        res.redirect(`${process.env.CLIENT_URL}/dashboard?token=${token}`);
+      }
+    );
   }
 );
 
 router.get('/current_user', (req, res) => {
-
-  console.log(req.user);
-  console.log(req.session);
-  console.log(req.sessionID);
-  console.log(req.isAuthenticated());
-  console.log(req.session.cookie);
-
-  if (req.isAuthenticated()) {
-    res.send(req.user);
-  } else {
-    res.status(401).send({ user: null });
+  const { decoded, error } = verifyToken(req, res);
+  if (error) {
+      return res.status(401).json({ message: 'Unauthorized: No token provided or token is invalid' });
   }
+  // Optionally, verify the user still exists in the database here
+  res.json({
+      id: decoded.id,
+      displayName: decoded.displayName,
+      email: decoded.email,
+      role: decoded.role
+  });
 });
 
 router.get('/logout', (req, res) => {
