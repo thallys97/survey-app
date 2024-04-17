@@ -1,10 +1,14 @@
 import React, { useContext } from 'react';
-import { AuthContext } from '../contexts/AuthContext';
+import { authService } from '../services/authService';
 import LogoutButton from './LogoutButton';
 import DashboardButton from './DashboardButton';
 
 const Home = () => {
-  const { user, login } = useContext(AuthContext);
+  //const { user, login } = useContext(AuthContext);
+
+  const login = () => {
+    authService.login();
+  };
 
   return (
     <div className="h-screen flex flex-col items-center justify-center bg-gray-100">
