@@ -11,16 +11,22 @@ const UserManagement = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    if (user.role === 'SurveyAdmin') {
-      fetchUsers();
-    } else {
+    if (user.role !== 'SurveyAdmin') {
       navigate('/dashboard');
+    } else {
+      fetchUsers();
     }
   }, [user, navigate]);
 
   const fetchUsers = async () => {
+    const token = localStorage.getItem('token');
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    };
     try {
-      const response = await axiosInstance.get('/api/users');
+      const response = await axiosInstance.get('/api/users', config);
       setUsers(response.data);
     } catch (error) {
       console.error('Erro ao buscar usuários', error);
@@ -28,8 +34,14 @@ const UserManagement = () => {
   };
 
   const handleRoleChange = async (userId, newRole) => {
+    const token = localStorage.getItem('token');
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    };
     try {
-      await axiosInstance.put(`/api/users/${userId}/role`, { role: newRole });
+      await axiosInstance.put(`/api/users/${userId}/role`, { role: newRole }, config);
       fetchUsers(); // Refresh the list of users
     } catch (error) {
       console.error('Erro ao atualizar role do usuário', error);
