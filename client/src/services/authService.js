@@ -29,6 +29,20 @@ const authService = {
     localStorage.removeItem('token');
     // Redireciona para a página de login ou home
     window.location.href = '/';
+  },
+
+  validateToken: async (token) => {
+    try {
+      const response = await axiosInstance.get('/auth/validate_token', {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      return response.data;
+    } catch (error) {
+      console.log('Erro ao validar o token', error);
+      return null;
+    }
   }
 };
 
