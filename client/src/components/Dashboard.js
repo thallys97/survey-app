@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
 import LogoutButton from './LogoutButton';
 import { useNavigate } from 'react-router-dom';
@@ -7,9 +7,17 @@ const Dashboard = () => {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const handleNavigation = (path) => {
+  useEffect(() => {
+    if (!user) {
+      navigate('/'); // Redireciona para a Home se não estiver autenticado
+    }
+  }, [user, navigate]);
+
+   // Função para navegar entre rotas
+   const handleNavigation = (path) => {
     navigate(path);
   };
+
 
   return (
     <div className="min-h-screen bg-gray-100 py-10">
@@ -28,7 +36,7 @@ const Dashboard = () => {
             <button onClick={() => handleNavigation('/responded-surveys')} className="bg-purple-500 text-white py-2 px-4 rounded-md hover:bg-purple-600 transition duration-300 font-bold">Checar Resultados de Surveys</button>
           </div>
           {user.role === 'SurveyAdmin' && (
-            <button onClick={() => navigate('/user-management')} className="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 transition duration-300 font-bold">Gerenciar Usuários</button>
+            <button onClick={() => handleNavigation('/user-management')} className="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 transition duration-300 font-bold">Gerenciar Usuários</button>
           )}
           <div className="mt-4">
             <LogoutButton />
