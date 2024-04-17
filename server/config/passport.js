@@ -19,61 +19,39 @@ module.exports = function(passport) {
         };
         try {
           let user = await User.findOne({ googleId: profile.id });
-          if (user) {
-            // User found, generate a token
-            const payload = {
-              id: user.id,
-              displayName: user.displayName,
-              email: user.email
-            };
-
-            jwt.sign(
-              payload,
-              process.env.JWT_SECRET,
-              { expiresIn: '1d' },
-              (err, token) => {
-                if (err) throw err;
-                done(null, user, token); // Pass the token along with the user
-              }
-            );
-          } else {
-            // No user was found, create a new user
-            user = await User.create(newUser);
-            // Generate a token for the new user
-            const payload = {
-              id: user.id,
-              displayName: user.displayName,
-              email: user.email
-            };
-
-            jwt.sign(
-              payload,
-              process.env.JWT_SECRET,
-              { expiresIn: '1d' },
-              (err, token) => {
-                if (err) throw err;
-                done(null, user, token); // Pass the token along with the user
-              }
-            );
+          if (!user) {
+            user = await User.create(newUser); // Create a new user if not found
           }
+          // Generate the token for the user
+          const payload = {
+            id: user.id,
+            displayName: user.displayName,
+            email: user.email
+          };
+          const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1d' });
+      
+          // Do not pass the token to done, handle the redirection here or outside of the strategy
+          // You will handle the redirection in the route
+          done(null, user);
         } catch (error) {
           console.error(error);
+          done(error, null);
         }
       }
     )
   );
 
   // Serialize and deserialize user for session support
-  passport.serializeUser((user, done) => {
-    done(null, user.id);
-  });
+  // passport.serializeUser((user, done) => {
+  //   done(null, user.id);
+  // });
 
-  passport.deserializeUser(async (id, done) => {
-    try {
-      const user = await User.findById(id);
-      done(null, user);
-    } catch (err) {
-      done(err);
-    }
-  });
+  // passport.deserializeUser(async (id, done) => {
+  //   try {
+  //     const user = await User.findById(id);
+  //     done(null, user);
+  //   } catch (err) {
+  //     done(err);
+  //   }
+  // });
 };
