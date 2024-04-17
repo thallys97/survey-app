@@ -100,8 +100,23 @@ const SurveyCreator = () => {
     if (!isFormValid()) {
       return; // Se a validação falhar, não prosseguir com a submissão
     }
+
+    // Pega o token do localStorage
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setError("Não autenticado. Por favor, faça o login novamente.");
+      setShowError(true);
+      return;
+    }
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    };
+
     try {
-      const response = await axiosInstance.post('/api/surveys', survey);
+      const response = await axiosInstance.post('/api/surveys', survey, config);
       console.log(response.data);
   
       // Reset form after successful submission
@@ -111,7 +126,8 @@ const SurveyCreator = () => {
   
     } catch (error) {
       console.error('Erro ao criar survey', error);
-      // Handle the error state
+      setError("Falha ao criar survey. Por favor, tente novamente.");
+      setShowError(true);
     }
   };
   
