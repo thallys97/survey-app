@@ -17,22 +17,47 @@ const SurveyResponder = () => {
   // const navigate = useNavigate();
 
   
-
-    const selectSurvey = async (surveyId) => {
-    
-        try {
-        const response = await axiosInstance.get(`/api/surveys/${surveyId}`);
-        setSelectedSurvey(response.data);
-        setAnswers(
-        response.data.questions.reduce((acc, question) => {
-            acc[question._id] = '';
-            return acc;
-        }, {})
-        );
-        } catch (error) {
-            console.error('Erro ao selecionar survey', error);
-        }
+  useEffect(() => {
+    const fetchSurveys = async () => {
+      setLoading(true);
+      try {
+        const token = localStorage.getItem('token');
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        };
+        const response = await axiosInstance.get('/api/surveys/open', config);
+        setSurveysList(response.data);
+      } catch (error) {
+        console.error('Erro ao buscar surveys', error);
+        setError('Falha ao carregar surveys.');
+      }
+      setLoading(false);
     };
+
+    fetchSurveys();
+  }, []);
+
+  const selectSurvey = async (surveyId) => {
+    try {
+      const token = localStorage.getItem('token');
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
+      const response = await axiosInstance.get(`/api/surveys/${surveyId}`, config);
+      setSelectedSurvey(response.data);
+      setAnswers(response.data.questions.reduce((acc, question) => {
+        acc[question._id] = '';
+        return acc;
+      }, {}));
+    } catch (error) {
+      console.error('Erro ao selecionar survey', error);
+      setError('Falha ao selecionar survey.');
+    }
+  };
 
     const handleAnswerChange = (questionId, choice) => {
     setAnswers({ ...answers, [questionId]: choice });
@@ -42,20 +67,6 @@ const SurveyResponder = () => {
     return Object.values(answers).every((answer) => answer !== '');
     };
 
-  useEffect(() => {
-    const fetchSurveys = async () => {
-      setLoading(true);
-      try {
-        const response = await axiosInstance.get('/api/surveys/open');
-        setSurveysList(response.data); // Assumindo que o backend envia as surveys abertas na resposta
-      } catch (error) {
-        console.error('Erro ao buscar surveys', error);
-      }
-      setLoading(false);
-    };
-
-    fetchSurveys();
-  }, []);
 
   const handleCloseSurvey = async (surveyId) => {
     try {
@@ -69,18 +80,23 @@ const SurveyResponder = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent the default form action
+    e.preventDefault();
     if (!isSurveyComplete()) {
       setError('Por favor, responda a todas as perguntas antes de enviar o survey.');
-      
       return;
     }
-  
+
     try {
+      const token = localStorage.getItem('token');
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
       const response = await axiosInstance.post('/api/surveys/response', {
         surveyId: selectedSurvey._id,
         responses: answers
-      });
+      }, config);
       console.log(response.data);
       setSelectedSurvey(null);
       setAnswers({});
@@ -89,6 +105,7 @@ const SurveyResponder = () => {
       
     } catch (error) {
       console.error('Erro ao submeter respostas', error);
+      setError('Falha ao enviar respostas. Tente novamente.');
     }
   };
 
@@ -183,6 +200,7 @@ const SurveyResponder = () => {
 
   return (
     <div className="flex flex-col justify-center items-center h-screen bg-gray-100 px-4">
+      <ErrorMessage message={error} visible={!!error} onClose={() => setError('')} />
       <div className="w-full max-w-3xl bg-white rounded-lg shadow p-6">
         <DashboardButton />
         <h2 className="text-2xl font-bold text-center mb-6">Surveys Disponíveis</h2>
