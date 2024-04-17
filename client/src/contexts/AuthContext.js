@@ -11,6 +11,8 @@ export const AuthProvider = ({ children }) => {
   const location = useLocation();
   console.log(location);
 
+  console.log(URLSearchParams);
+
   useEffect(() => {
     const extractToken = () => {
       const query = new URLSearchParams(location.search);
