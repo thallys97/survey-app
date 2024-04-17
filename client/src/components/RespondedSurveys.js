@@ -45,14 +45,30 @@ const RespondedSurveys = () => {
 
   useEffect(() => {
     const fetchRespondedSurveys = async () => {
-      const { data } = await axiosInstance.get('/api/surveys/responded');
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.log('No token found');
+        return;
+      }
+      const config = {
+        headers: { Authorization: `Bearer ${token}` }
+      };
+      const { data } = await axiosInstance.get('/api/surveys/responded', config);
       setRespondedSurveys(data);
     };
     fetchRespondedSurveys();
   }, []);
 
   const viewSurveyResults = async (surveyId) => {
-    const { data } = await axiosInstance.get(`/api/surveys/results/${surveyId}`);
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.log('No token found');
+      return;
+    }
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
+    const { data } = await axiosInstance.get(`/api/surveys/results/${surveyId}`, config);
     setSelectedSurvey(data.survey);
     setSurveyResults(data.results);
   };
