@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { authService } from '../services/authService';
+import authService from '../services/authService';
 import LogoutButton from './LogoutButton';
 import DashboardButton from './DashboardButton';
 
