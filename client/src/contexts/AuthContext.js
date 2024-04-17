@@ -7,11 +7,12 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  console.log(user);
-  const location = useLocation();
-  console.log(location);
-
+  
+  
+  
   useEffect(() => {
+    
+    const location = useLocation();
     const extractToken = () => {
       const query = new URLSearchParams(location.search);
       console.log(query);
