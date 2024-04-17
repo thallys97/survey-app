@@ -10,11 +10,11 @@ const Home = () => {
     authService.login();
   };
 
+  let user = null;
   if (localStorage.getItem('token')) {
-    const user = authService.validateToken();
-  } else {
-    const user = null;
+    user = authService.validateToken();
   }
+
 
   return (
     <div className="h-screen flex flex-col items-center justify-center bg-gray-100">
