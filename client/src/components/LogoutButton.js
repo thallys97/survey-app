@@ -1,14 +1,15 @@
-import React from 'react';
-import authService from '../services/authService';
+import React, { useContext } from 'react';
+import { AuthContext } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 const LogoutButton = () => {
+  const { logout } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    await authService.logout();
-    navigate('/');
-    window.location.reload();
+    await logout();  // Logout através do AuthContext
+    //navigate('/');   // Redireciona para a página inicial após o logout
+    //window.location.reload(); // Se necessário, descomente para forçar a recarga da página
   };
 
   return (
