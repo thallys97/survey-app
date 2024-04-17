@@ -1,20 +1,47 @@
+
 import React, { useContext, useEffect } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
+import authService from '../services/authService';
 import LogoutButton from './LogoutButton';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const Dashboard = () => {
-  const { user } = useContext(AuthContext);
+  const { user, setUser } = useContext(AuthContext);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
-    if (!user) {
-      navigate('/'); // Redireciona para a Home se não estiver autenticado
-    }
-  }, [user, navigate]);
+    const handleAuthentication = async () => {
+      const urlParams = new URLSearchParams(location.search);
+      const urlToken = urlParams.get('token');
+      const localStorageToken = localStorage.getItem('token');
+      
+      let token = urlToken || localStorageToken;
+      
+      if (urlToken && urlToken !== localStorageToken) {
+        localStorage.setItem('token', urlToken);
+      }
 
-   // Função para navegar entre rotas
-   const handleNavigation = (path) => {
+      if (token) {
+        const validatedUser = await authService.validateToken(token);
+        if (validatedUser) {
+          setUser(validatedUser);
+          window.history.replaceState({}, document.title, '/dashboard');
+        } else {
+          console.error("Token validation failed");
+          localStorage.removeItem('token');
+          navigate('/');
+        }
+      } else {
+        navigate('/');
+      }
+    };
+
+    handleAuthentication();
+  }, [location, navigate, setUser]);
+
+  // Função para navegar entre rotas
+  const handleNavigation = (path) => {
     navigate(path);
   };
 
