@@ -11,7 +11,7 @@ router.get('/google',
 
 // Callback da rota após autenticação
 router.get('/google/callback',
-  passport.authenticate('google', { failureRedirect: '/login' }),
+  passport.authenticate('google', { failureRedirect: '/login', session: false }),
   (req, res) => {
     // Usuário autenticado, agora gera um token JWT
     const payload = {
