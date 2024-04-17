@@ -30,6 +30,8 @@ router.get('/google/callback',
           console.error(err);
           return res.status(500).json({ message: 'Erro ao gerar token JWT' });
         }
+        console.log(token);
+        console.log(`${process.env.CLIENT_URL}/dashboard?token=${token}`)
         // Redireciona para o cliente com o token
         res.redirect(`${process.env.CLIENT_URL}/dashboard?token=${token}`);
       }
