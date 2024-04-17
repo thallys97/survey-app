@@ -8,8 +8,14 @@ const WaitingSurveys = () => {
 
   useEffect(() => {
     const fetchWaitingSurveys = async () => {
+      const token = localStorage.getItem('token');
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
       try {
-        const response = await axiosInstance.get('/api/surveys/waiting');
+        const response = await axiosInstance.get('/api/surveys/waiting', config);
         setWaitingSurveys(response.data);
       } catch (error) {
         console.error("Error fetching waiting surveys: ", error);
@@ -19,9 +25,16 @@ const WaitingSurveys = () => {
     fetchWaitingSurveys();
   }, []);
 
+
   const handleSelectSurvey = async (surveyId) => {
+    const token = localStorage.getItem('token');
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    };
     try {
-      const response = await axiosInstance.get(`/api/surveys/${surveyId}`);
+      const response = await axiosInstance.get(`/api/surveys/${surveyId}`, config);
       setSelectedSurvey(response.data);
     } catch (error) {
       console.error("Error selecting survey: ", error);
@@ -33,8 +46,14 @@ const WaitingSurveys = () => {
   };
 
   const handlePublishSurvey = async (surveyId) => {
+    const token = localStorage.getItem('token');
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    };
     try {
-      await axiosInstance.put(`/api/surveys/open/${surveyId}`);
+      await axiosInstance.put(`/api/surveys/open/${surveyId}`, {}, config);
       setWaitingSurveys(waitingSurveys.filter(survey => survey._id !== surveyId));
       setSelectedSurvey(null);
     } catch (error) {
@@ -43,8 +62,14 @@ const WaitingSurveys = () => {
   };
 
   const handleDeleteSurvey = async (surveyId) => {
+    const token = localStorage.getItem('token');
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    };
     try {
-      await axiosInstance.delete(`/api/surveys/${surveyId}`);
+      await axiosInstance.delete(`/api/surveys/${surveyId}`, config);
       setWaitingSurveys(waitingSurveys.filter(survey => survey._id !== surveyId));
       setSelectedSurvey(null);
     } catch (error) {
