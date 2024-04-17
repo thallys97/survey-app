@@ -1,50 +1,22 @@
 
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
-import authService from '../services/authService';
 import LogoutButton from './LogoutButton';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
-  const { user, setUser } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const navigate = useNavigate();
-  const location = useLocation();
-
-  useEffect(() => {
-    const handleAuthentication = async () => {
-      const urlParams = new URLSearchParams(location.search);
-      const urlToken = urlParams.get('token');
-      const localStorageToken = localStorage.getItem('token');
-      
-      let token = urlToken || localStorageToken;
-      
-      if (urlToken && urlToken !== localStorageToken) {
-        localStorage.setItem('token', urlToken);
-      }
-
-      if (token) {
-        const validatedUser = await authService.validateToken(token);
-        if (validatedUser) {
-          setUser(validatedUser);
-          window.history.replaceState({}, document.title, '/dashboard');
-        } else {
-          console.error("Token validation failed");
-          localStorage.removeItem('token');
-          navigate('/');
-        }
-      } else {
-        navigate('/');
-      }
-    };
-
-    handleAuthentication();
-  }, [location, navigate, setUser]);
 
   // Função para navegar entre rotas
   const handleNavigation = (path) => {
     navigate(path);
   };
 
+  // Renderiza o dashboard apenas se o usuário estiver definido
+  if (!user) {
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-gray-100 py-10">
