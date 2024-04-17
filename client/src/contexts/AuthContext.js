@@ -12,6 +12,9 @@ export const AuthProvider = ({ children }) => {
   
   
   useEffect(() => {
+
+    console.log(location);
+    console.log(location.pathname);
     
     const extractToken = () => {
       const query = new URLSearchParams(location.search);
@@ -43,7 +46,7 @@ export const AuthProvider = ({ children }) => {
       }
       setLoading(false);
     };
-  
+    
     initializeAuth();
   }, [location]);
 
