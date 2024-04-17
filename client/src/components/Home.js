@@ -1,20 +1,11 @@
 import React, { useContext } from 'react';
-import authService from '../services/authService';
+import { AuthContext } from '../contexts/AuthContext';
 import LogoutButton from './LogoutButton';
 import DashboardButton from './DashboardButton';
 
+
 const Home = () => {
-  //const { user, login } = useContext(AuthContext);
-
-  const login = () => {
-    authService.login();
-  };
-
-  let user = null;
-  if (localStorage.getItem('token')) {
-    user = authService.validateToken();
-  }
-
+  const { user, login } = useContext(AuthContext);
 
   return (
     <div className="h-screen flex flex-col items-center justify-center bg-gray-100">
