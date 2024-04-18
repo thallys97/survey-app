@@ -78,7 +78,7 @@ const SurveyResponder = () => {
         }
       };
 
-      await axiosInstance.put(`/api/surveys/close/${surveyId}`, config);
+      await axiosInstance.put(`/api/surveys/close/${surveyId}`, {}, config);
       // Atualize a lista de surveys para remover a survey fechada
       const updatedSurveysList = surveysList.filter(survey => survey._id !== surveyId);
       setSurveysList(updatedSurveysList);
