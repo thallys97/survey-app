@@ -25,6 +25,9 @@ const SurveyResponder = () => {
         const config = {
           headers: {
             Authorization: `Bearer ${token}`
+          },
+          params: {
+            respondent: user.id
           }
         };
         const response = await axiosInstance.get('/api/surveys/open', config);
@@ -105,7 +108,8 @@ const SurveyResponder = () => {
       };
       const response = await axiosInstance.post('/api/surveys/response', {
         surveyId: selectedSurvey._id,
-        responses: answers
+        responses: answers,
+        respondent: user.id
       }, config);
       console.log(response.data);
       setSelectedSurvey(null);
