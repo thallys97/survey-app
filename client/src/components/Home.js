@@ -17,9 +17,15 @@ const Home = () => {
 
     const authenticateUser = async (token) => {
       const validatedUser = await authService.validateToken(token);
-      console.log(validatedUser);
       if (validatedUser) {
-        setUser(validatedUser);
+        setUser(
+          {
+            id: validatedUser.user.id,
+            displayName: validatedUser.user.displayName,
+            email: validatedUser.user.email,
+            role: validatedUser.user.role
+          }
+        );
         localStorage.setItem('token', token);
         window.history.replaceState({}, document.title, '/');
       } else {
