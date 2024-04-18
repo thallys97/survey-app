@@ -48,6 +48,8 @@ const SurveyResponder = () => {
         }
       };
       const response = await axiosInstance.get(`/api/surveys/${surveyId}`, config);
+      console.log(response.data);
+      console.log(response);
       setSelectedSurvey(response.data);
       setAnswers(response.data.questions.reduce((acc, question) => {
         acc[question._id] = '';
