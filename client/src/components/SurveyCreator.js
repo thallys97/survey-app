@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { AuthContext } from '../contexts/AuthContext';
 import axiosInstance from '../api/axiosInstance';
 import { useNavigate } from 'react-router-dom';
 import ErrorMessage from './ErrorMessage';
 import SuccessMessage from './SuccessMessage';
 
 const SurveyCreator = () => {
+  const { user } = useContext(AuthContext);
   const navigate = useNavigate(); // Inicializar useNavigate
   const [survey, setSurvey] = useState({
     title: '',
@@ -101,6 +103,13 @@ const SurveyCreator = () => {
       return; // Se a validação falhar, não prosseguir com a submissão
     }
 
+      // Include the createdBy field in the survey data to be sent
+    const surveyData = {
+      ...survey,
+      createdBy: user.id // Pass the user's ID from the context
+    };
+
+
     // Pega o token do localStorage
     const token = localStorage.getItem('token');
     if (!token) {
@@ -116,7 +125,7 @@ const SurveyCreator = () => {
     };
 
     try {
-      const response = await axiosInstance.post('/api/surveys', survey, config);
+      const response = await axiosInstance.post('/api/surveys', surveyData, config);
       console.log(response.data);
   
       // Reset form after successful submission
