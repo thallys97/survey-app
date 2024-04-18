@@ -17,6 +17,7 @@ const Home = () => {
 
     const authenticateUser = async (token) => {
       const validatedUser = await authService.validateToken(token);
+      console.log(validatedUser);
       if (validatedUser) {
         setUser(validatedUser);
         localStorage.setItem('token', token);
