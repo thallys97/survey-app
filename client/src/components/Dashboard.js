@@ -5,7 +5,6 @@ import LogoutButton from './LogoutButton';
 import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
-  window.location.reload();
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
