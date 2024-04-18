@@ -56,6 +56,7 @@ router.get('/validate_token', ensureAuth, (req, res) => {
 
 
 router.get('/current_user', ensureAuth, (req, res) => {
+  console.log(req.user);
   res.json(req.user);
 });
 
