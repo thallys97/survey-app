@@ -26,7 +26,8 @@ module.exports = function(passport) {
           const payload = {
             id: user.id,
             displayName: user.displayName,
-            email: user.email
+            email: user.email,
+            role: user.role 
           };
           const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1d' });
       
