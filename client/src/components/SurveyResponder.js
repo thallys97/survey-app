@@ -70,7 +70,15 @@ const SurveyResponder = () => {
 
   const handleCloseSurvey = async (surveyId) => {
     try {
-      await axiosInstance.put(`/api/surveys/close/${surveyId}`);
+
+      const token = localStorage.getItem('token');
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
+
+      await axiosInstance.put(`/api/surveys/close/${surveyId}`, config);
       // Atualize a lista de surveys para remover a survey fechada
       const updatedSurveysList = surveysList.filter(survey => survey._id !== surveyId);
       setSurveysList(updatedSurveysList);
