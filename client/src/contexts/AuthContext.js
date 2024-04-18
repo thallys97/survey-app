@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
             id: response.id,
             displayName: response.displayName,
             email: response.email,
-            //role: response.data.role
+            role: response.role
           });
         }
         setLoading(false);
