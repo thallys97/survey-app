@@ -44,7 +44,7 @@ const Home = () => {
     <div className="h-screen flex flex-col items-center justify-center bg-gray-100">
       {user ? (
         <div className="text-center">
-          <h1 className="text-4xl font-bold text-gray-800 mb-4">Bem-vindo, {user.displayName}!</h1>
+          <h1 className="text-4xl font-bold text-gray-800 mb-4">Bem-vindo!</h1>
           <DashboardButton />
           <LogoutButton />
         </div>
