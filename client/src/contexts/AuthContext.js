@@ -13,13 +13,12 @@ export const AuthProvider = ({ children }) => {
       const fetchCurrentUser = async () => {
         const response = await authService.fetchCurrentUser();
         console.log(response);
-        console.log(response.data);
-        if (response && response.data) {
+        if (response) {
           setUser({
-            id: response.data.id,
-            displayName: response.data.displayName,
-            email: response.data.email,
-            role: response.data.role
+            id: response.id,
+            displayName: response.displayName,
+            email: response.email,
+            //role: response.data.role
           });
         }
         setLoading(false);
