@@ -1,11 +1,23 @@
 const Survey = require('../models/Survey');
 const Response = require('../models/Response');
+const User = require('../models/User');
 
 // Cria uma nova survey
 exports.createSurvey = async (req, res) => {
   try {
-    const { title, questions } = req.body;
-    const survey = new Survey({ title, questions, createdBy: req.user._id });
+    const { title, questions, createdBy } = req.body;
+
+    // Encontre o usuário com base no ID fornecido no corpo da requisição
+    const user = await User.findById(createdBy);
+    
+    // Se o usuário não for encontrado, envie uma resposta de erro
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Se o usuário for encontrado, crie a survey com o usuário como createdBy
+    const survey = new Survey({ title, questions, createdBy: user._id });
+    
     await survey.save();
     res.status(201).json(survey);
   } catch (error) {
@@ -89,11 +101,21 @@ exports.getSurveyResults = async (req, res) => {
 // Lista apenas as surveys que estão abertas e ainda não respondidas pelo usuário
 exports.getOpenSurveys = async (req, res) => {
   try {
-    // Recupere todas as surveys que estão abertas
-    let surveys = await Survey.find({ open: true }).lean();
+    // Recupere o ID do usuário respondente da query string, se fornecido
+    const respondentId = req.query.respondent || req.user._id;
 
-    // Filtre as surveys para excluir aquelas já respondidas pelo usuário
-    const respondedSurveys = await Response.find({ respondent: req.user._id });
+    // Encontre o usuário com base no ID fornecido
+    const respondent = await User.findById(respondentId);
+    
+    // Se o usuário não for encontrado, envie uma resposta de erro
+    if (!respondent) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    let surveys = await Survey.find({ open: true }).lean();
+    
+    // Filtre as surveys para excluir aquelas já respondidas pelo usuário fornecido
+    const respondedSurveys = await Response.find({ respondent: respondent._id });
     const respondedSurveyIds = respondedSurveys.map((response) => response.survey.toString());
     surveys = surveys.filter((survey) => !respondedSurveyIds.includes(survey._id.toString()));
 
@@ -175,7 +197,15 @@ exports.closeSurvey = async (req, res) => {
 // Submeter resposta para uma survey
 exports.submitResponse = async (req, res) => {
   try {
-    const { surveyId, responses } = req.body;
+    const { surveyId, responses, respondent } = req.body;
+
+    // Encontre o usuário com base no ID fornecido no corpo da requisição
+    const user = await User.findById(respondent);
+    
+    // Se o usuário não for encontrado, envie uma resposta de erro
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
 
     // Crie um array de respostas com o formato correto
     const formattedResponses = Object.entries(responses).map(([questionId, choice]) => ({
@@ -186,7 +216,7 @@ exports.submitResponse = async (req, res) => {
     const newResponse = new Response({
       survey: surveyId,
       responses: formattedResponses,
-      respondent: req.user._id // Assegure-se de que o usuário esteja autenticado
+      respondent: user._id // Assegure-se de que o usuário esteja autenticado
     });
 
     await newResponse.save(); // Salve a nova resposta no banco de dados
