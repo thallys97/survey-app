@@ -11,8 +11,16 @@ export const AuthProvider = ({ children }) => {
     const token = localStorage.getItem('token');
     if (token) {
       const fetchCurrentUser = async () => {
-        const fetchedUser = await authService.fetchCurrentUser();
-        setUser(fetchedUser);
+        const response = await authService.fetchCurrentUser();
+        console.log(response.data);
+        if (response && response.data) {
+          setUser({
+            id: response.data.id,
+            displayName: response.data.displayName,
+            email: response.data.email,
+            role: response.data.role
+          });
+        }
         setLoading(false);
       };
 
