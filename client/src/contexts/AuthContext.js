@@ -12,6 +12,7 @@ export const AuthProvider = ({ children }) => {
     if (token) {
       const fetchCurrentUser = async () => {
         const response = await authService.fetchCurrentUser();
+        console.log(response);
         console.log(response.data);
         if (response && response.data) {
           setUser({
