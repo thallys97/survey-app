@@ -17,7 +17,8 @@ router.get('/google/callback',
     const payload = {
       id: req.user.id,
       displayName: req.user.displayName,
-      email: req.user.email
+      email: req.user.email,
+      role: req.user.role
     };
     
     // Assina o token JWT com o secret e expira em 1 dia
